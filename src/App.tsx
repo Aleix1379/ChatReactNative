@@ -14,25 +14,60 @@ import {
   StyleSheet,
   Text,
   View,
+  Dimensions,
 } from 'react-native';
+
 import {Provider} from 'react-redux';
 import {store} from './store';
-import ReduxHooksComponent from './components/ReduxHooksComponent';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+import PostsComponent from './components/PostsComponent';
+import HeaderComponent from './components/HeaderComponent';
+import CommentsComponent from './components/CommentsComponent';
+import BottomBarComponent from './components/BottomBarComponent';
+export enum ScreenSize {
+  Desktop = 500,
+}
 
 const App = () => {
+  const isMobile = (): boolean => {
+    return Dimensions.get('window').width < ScreenSize.Desktop;
+  };
+
+  const isDesktop = (): boolean => {
+    return Dimensions.get('window').width >= ScreenSize.Desktop;
+  };
+
   return (
     <Provider store={store}>
       <>
         <StatusBar barStyle="dark-content" />
         <SafeAreaView>
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <View style={styles.body}>
-              <Text>App chat working... 🙄 using Redux with Typescript 😏</Text>
-              <ReduxHooksComponent />
+          {/*<ScrollView*/}
+          {/*  contentInsetAdjustmentBehavior="automatic"*/}
+          {/*  style={styles.scrollView}>*/}
+          <View style={styles.body}>
+            {isDesktop() && <HeaderComponent />}
+
+            <View style={styles.messages}>
+              <View style={styles.posts}>
+                <PostsComponent />
+              </View>
+
+              {isDesktop() && (
+                <View style={styles.comments}>
+                  <CommentsComponent />
+                </View>
+              )}
             </View>
-          </ScrollView>
+
+            {isMobile() && (
+              <View style={styles.bottomBar}>
+                <BottomBarComponent />
+              </View>
+            )}
+          </View>
+          {/*</ScrollView>*/}
         </SafeAreaView>
       </>
     </Provider>
@@ -48,33 +83,32 @@ const styles = StyleSheet.create({
     right: 0,
   },
   body: {
-    backgroundColor: '#fff',
+    backgroundColor: '#b2b2b2',
+    height: (Dimensions.get('window').height - getStatusBarHeight()),
+    overflow: 'scroll',
+    display: 'flex',
+    flexDirection: 'column',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  messages: {
+    display: 'flex',
+    // height: '100%',
+    // maxHeight: '100%',
+    overflow: 'scroll',
+    flex: 1,
+    flexDirection: 'row',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#222',
+  posts: {
+    flex: 2,
+    backgroundColor: '#0f0',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: '#424242',
+  comments: {
+    flex: 3,
+    backgroundColor: '#f0a',
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: '#424242',
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  bottomBar: {
+    marginTop: 'auto',
+    backgroundColor: '#0af',
+    height: 50,
   },
 });
 
