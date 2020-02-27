@@ -1,30 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {InitialState, RootDispatcher} from '../store/root-reducer';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Post} from '../store/root-reducer';
+import {ScrollView, View} from 'react-native';
+import MessageComponent from './MessageComponent';
 
-interface Props {}
-
-interface StateProps {
-  name: string;
-  address: string;
+interface Props {
+  postPressHandler(postId: number): void;
 }
 
-const PostsComponent: React.FC<Props> = () => {
-  const {name, address} = useSelector<InitialState, StateProps>(
-    (state: InitialState) => {
-      return {
-        name: state.name,
-        address: state.address,
-      };
-    },
-    shallowEqual,
-  );
-
+const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
   const [posts, setPosts] = useState([]);
-
-  const dispatch = useDispatch();
-  const rootDispatcher = new RootDispatcher(dispatch);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,19 +25,27 @@ const PostsComponent: React.FC<Props> = () => {
         setPosts(data);
       })
       .catch(err => console.error(err));
-  });
+  }, []);
+
+  // const showPost = (postId: number) => {
+  //   console.log('showPost::View post with ID: ' + postId);
+  // };
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View style={styles.posts}>
-        <Text>{JSON.stringify(posts, null, 2)}</Text>
+      <View>
+        {posts.map((post: Post) => (
+          <MessageComponent
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            body={post.body}
+            messagePressHandler={postPressHandler}
+          />
+        ))}
       </View>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  posts: {},
-});
 
 export default PostsComponent;
