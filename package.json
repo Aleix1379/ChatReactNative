@@ -21,7 +21,9 @@
     "react-dom": "^16.13.0",
     "react-native": "^0.61.5",
     "react-native-web": "^0.12.2",
-    "react-scripts": "^3.4.0"
+    "react-redux": "^7.2.0",
+    "react-scripts": "^3.4.0",
+    "redux": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -31,6 +33,7 @@
     "@types/node": "^13.7.6",
     "@types/react": "^16.9.23",
     "@types/react-native": "^0.61.17",
+    "@types/react-redux": "^7.1.7",
     "@types/react-test-renderer": "^16.9.2",
     "babel-jest": "^25.1.0",
     "babel-plugin-react-native-web": "^0.12.2",
@@ -40,6 +43,7 @@
     "react-addons-test-utils": "^15.6.2",
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "16.9.0",
+    "redux-tools": "^3.2.0",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.2"
   },
