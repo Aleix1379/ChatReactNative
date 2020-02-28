@@ -1,8 +1,9 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import {NavigationScreenProp, NavigationState,} from 'react-navigation';
 
 interface Props {
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  navigation: NavigationScreenProp<NavigationState>;
 }
 
 const User: React.FC<Props> = ({navigation}) => {
