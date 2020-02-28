@@ -29,10 +29,7 @@ import theme from './styles/theme.style';
 import CommentsHeaderComponent from './components/CommentsHeaderComponent';
 import LoadingComponent from './components/loadingComponent';
 import {RootDispatcher} from './store/root-reducer';
-
-export enum ScreenSize {
-  Desktop = 500,
-}
+import {WindowUtils} from './utils/WindowUtils';
 
 const App = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -41,14 +38,6 @@ const App = () => {
 
   const dispatch = useDispatch();
   const rootDispatcher = new RootDispatcher(dispatch);
-
-  const isMobile = (): boolean => {
-    return Dimensions.get('window').width < ScreenSize.Desktop;
-  };
-
-  const isDesktop = (): boolean => {
-    return Dimensions.get('window').width >= ScreenSize.Desktop;
-  };
 
   const showCommentOfPost = async (postId: number, name: string) => {
     setShowLoading(true);
@@ -69,7 +58,7 @@ const App = () => {
   };
 
   const getCommentsStyle = (): StyleProp<ViewStyle> => {
-    if (isDesktop()) {
+    if (WindowUtils.isDesktop()) {
       return {
         flex: 3,
       };
@@ -91,23 +80,23 @@ const App = () => {
   };
 
   return (
-    // <Provider store={store}>
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <View style={styles.body}>
           {showLoading && <LoadingComponent />}
 
-          {isDesktop() && <HeaderComponent />}
+          {WindowUtils.isDesktop() && <HeaderComponent />}
 
           <View style={styles.messages}>
             <View style={styles.posts}>
               <PostsComponent postPressHandler={showCommentOfPost} />
             </View>
 
-            {(isDesktop() || (isMobile() && showCommentsModal)) && (
+            {(WindowUtils.isDesktop() ||
+              (WindowUtils.isMobile() && showCommentsModal)) && (
               <View style={getCommentsStyle()}>
-                {isMobile() && (
+                {postTitle && (
                   <CommentsHeaderComponent
                     title={postTitle}
                     onBackPressHandler={hideComments}
@@ -118,7 +107,7 @@ const App = () => {
             )}
           </View>
 
-          {isMobile() && !showCommentsModal && (
+          {WindowUtils.isMobile() && !showCommentsModal && (
             <View style={styles.bottomBar}>
               <BottomBarComponent />
             </View>
@@ -126,7 +115,6 @@ const App = () => {
         </View>
       </SafeAreaView>
     </>
-    // </Provider>
   );
 };
 

@@ -2,6 +2,7 @@ import {Action, Dispatch, Reducer} from 'redux';
 
 export interface InitialState {
   comments: Comment[];
+  currentPostSelectedId: number;
 }
 
 export interface Post {
@@ -21,6 +22,7 @@ export interface Comment {
 
 export const initialState: InitialState = {
   comments: [],
+  currentPostSelectedId: -1,
 };
 
 export interface DispatchAction extends Action<ActionType> {
@@ -29,6 +31,7 @@ export interface DispatchAction extends Action<ActionType> {
 
 export enum ActionType {
   UpdateComments,
+  SelectPost,
 }
 
 export const rootReducer: Reducer<InitialState, DispatchAction> = (
@@ -37,6 +40,11 @@ export const rootReducer: Reducer<InitialState, DispatchAction> = (
 ) => {
   if (action.type === ActionType.UpdateComments) {
     return {...state, comments: action.payload.comments || []};
+  } else if (action.type === ActionType.SelectPost) {
+    return {
+      ...state,
+      currentPostSelectedId: action.payload.currentPostSelectedId || -1,
+    };
   } else {
     return state;
   }
@@ -50,7 +58,13 @@ export class RootDispatcher {
   }
 
   updateComments = (comments: Comment[]) => {
-    console.log();
     this.dispatch({type: ActionType.UpdateComments, payload: {comments}});
+  };
+
+  selectPost = (currentPostSelectedId: number) => {
+    this.dispatch({
+      type: ActionType.SelectPost,
+      payload: {currentPostSelectedId},
+    });
   };
 }

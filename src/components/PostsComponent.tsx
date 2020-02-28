@@ -1,14 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import {Post} from '../store/root-reducer';
-import {ScrollView, View} from 'react-native';
+import {InitialState, Post, RootDispatcher} from '../store/root-reducer';
+import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import MessageComponent from './MessageComponent';
+import {WindowUtils} from '../utils/WindowUtils';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
 }
 
+interface StateProps {
+  currentPostSelectedId: number;
+}
+
 const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
   const [posts, setPosts] = useState([]);
+
+  const {currentPostSelectedId} = useSelector<InitialState, StateProps>(
+    (state: InitialState) => {
+      return {
+        currentPostSelectedId: state.currentPostSelectedId,
+      };
+    },
+    shallowEqual,
+  );
+
+  const dispatch = useDispatch();
+  const rootDispatcher = new RootDispatcher(dispatch);
 
   useEffect(() => {
     async function fetchData() {
@@ -27,20 +45,36 @@ const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
       .catch(err => console.error(err));
   }, []);
 
-  // const showPost = (postId: number) => {
-  //   console.log('showPost::View post with ID: ' + postId);
-  // };
+  const getPostsStyles = (): StyleProp<ViewStyle> => {
+    let style = {
+      paddingHorizontal: 0,
+    };
+    if (WindowUtils.isDesktop()) {
+      style.paddingHorizontal = 15;
+    }
+    return style;
+  };
+
+  const selectPost = (postId: number, name: string) => {
+    rootDispatcher.selectPost(postId);
+    postPressHandler(postId, name);
+  };
+
+  const isCurrentPostSelected = (postId: number): boolean => {
+    return currentPostSelectedId === postId;
+  };
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View>
+      <View style={getPostsStyles()}>
         {posts.map((post: Post) => (
           <MessageComponent
             key={post.id}
             id={post.id}
             title={post.title}
             body={post.body}
-            messagePressHandler={postPressHandler}
+            isSelected={isCurrentPostSelected(post.id)}
+            messagePressHandler={selectPost}
           />
         ))}
       </View>
