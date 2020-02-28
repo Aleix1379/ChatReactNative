@@ -1,12 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import theme from '../styles/theme.style';
-
 interface Props {
   id: number;
   title: string;
   body: string;
-  messagePressHandler(postId: number): void;
+  messagePressHandler(postId: number, name: string): void;
 }
 
 const MessageComponent: React.FC<Props> = ({
@@ -19,7 +18,7 @@ const MessageComponent: React.FC<Props> = ({
     text.charAt(0).toUpperCase() + text.slice(1);
 
   return (
-    <TouchableHighlight onPress={() => messagePressHandler(id)}>
+    <TouchableHighlight onPress={() => messagePressHandler(id, title)}>
       <View style={styles.post}>
         <Text style={styles.title}>{capitalizeFirstLetter(title)}</Text>
         <Text style={styles.body}>{body}</Text>

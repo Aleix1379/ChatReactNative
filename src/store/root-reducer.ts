@@ -1,8 +1,7 @@
 import {Action, Dispatch, Reducer} from 'redux';
 
 export interface InitialState {
-  name: string;
-  address: string;
+  comments: Comment[];
 }
 
 export interface Post {
@@ -12,9 +11,16 @@ export interface Post {
   body: string;
 }
 
+export interface Comment {
+  postId: number;
+  id: number;
+  name: string;
+  email: string;
+  body: string;
+}
+
 export const initialState: InitialState = {
-  name: '',
-  address: '',
+  comments: [],
 };
 
 export interface DispatchAction extends Action<ActionType> {
@@ -22,24 +28,15 @@ export interface DispatchAction extends Action<ActionType> {
 }
 
 export enum ActionType {
-  UpdateName,
-  UpdateAddress,
-  DeleteName,
-  DeleteAddress,
+  UpdateComments,
 }
 
 export const rootReducer: Reducer<InitialState, DispatchAction> = (
   state = initialState,
   action,
 ) => {
-  if (action.type === ActionType.UpdateName) {
-    return {...state, name: action.payload.name || ''};
-  } else if (action.type === ActionType.DeleteName) {
-    return {...state, name: ''};
-  } else if (action.type === ActionType.DeleteAddress) {
-    return {...state, address: ''};
-  } else if (action.type === ActionType.UpdateAddress) {
-    return {...state, address: action.payload.address || ''};
+  if (action.type === ActionType.UpdateComments) {
+    return {...state, comments: action.payload.comments || []};
   } else {
     return state;
   }
@@ -52,14 +49,8 @@ export class RootDispatcher {
     this.dispatch = dispatch;
   }
 
-  updateName = (name: string) =>
-    this.dispatch({type: ActionType.UpdateName, payload: {name}});
-
-  updateAddress = (address: string) =>
-    this.dispatch({type: ActionType.UpdateAddress, payload: {address}});
-
-  deleteName = () => this.dispatch({type: ActionType.DeleteName, payload: {}});
-
-  deleteAddress = () =>
-    this.dispatch({type: ActionType.DeleteAddress, payload: {}});
+  updateComments = (comments: Comment[]) => {
+    console.log();
+    this.dispatch({type: ActionType.UpdateComments, payload: {comments}});
+  };
 }

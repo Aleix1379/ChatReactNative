@@ -6,19 +6,18 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
   Dimensions,
+  SafeAreaView,
+  StatusBar,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-import {Provider} from 'react-redux';
-import {store} from './store';
+import {useDispatch} from 'react-redux';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 import PostsComponent from './components/PostsComponent';
@@ -26,11 +25,23 @@ import HeaderComponent from './components/HeaderComponent';
 import CommentsComponent from './components/CommentsComponent';
 import BottomBarComponent from './components/BottomBarComponent';
 
+import theme from './styles/theme.style';
+import CommentsHeaderComponent from './components/CommentsHeaderComponent';
+import LoadingComponent from './components/loadingComponent';
+import {RootDispatcher} from './store/root-reducer';
+
 export enum ScreenSize {
   Desktop = 500,
 }
 
 const App = () => {
+  const [showLoading, setShowLoading] = useState(false);
+  const [postTitle, setPostTitle] = useState('');
+  const [showCommentsModal, setCommentsModalVisible] = useState(false);
+
+  const dispatch = useDispatch();
+  const rootDispatcher = new RootDispatcher(dispatch);
+
   const isMobile = (): boolean => {
     return Dimensions.get('window').width < ScreenSize.Desktop;
   };
@@ -39,41 +50,83 @@ const App = () => {
     return Dimensions.get('window').width >= ScreenSize.Desktop;
   };
 
-  const showCommentOfPost = (postId: number) => {
-    if (isMobile()) {
-      console.log('');
+  const showCommentOfPost = async (postId: number, name: string) => {
+    setShowLoading(true);
+    setPostTitle(name);
+    try {
+      let response = await fetch(
+        `https://jsonplaceholder.typicode.com/posts/${postId}/comments`,
+      );
+      let responseJson = await response.json();
+      rootDispatcher.updateComments(responseJson);
+
+      setCommentsModalVisible(true);
+      setShowLoading(false);
+    } catch (error) {
+      console.error(error);
+      setShowLoading(false);
     }
   };
 
+  const getCommentsStyle = (): StyleProp<ViewStyle> => {
+    if (isDesktop()) {
+      return {
+        flex: 3,
+      };
+    } else {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 1000,
+        backgroundColor: theme.LIGHT_COLOR,
+      };
+    }
+  };
+
+  const hideComments = () => {
+    setCommentsModalVisible(false);
+  };
+
   return (
-    <Provider store={store}>
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <View style={styles.body}>
-            {isDesktop() && <HeaderComponent />}
+    // <Provider store={store}>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView>
+        <View style={styles.body}>
+          {showLoading && <LoadingComponent />}
 
-            <View style={styles.messages}>
-              <View style={styles.posts}>
-                <PostsComponent postPressHandler={showCommentOfPost} />
-              </View>
+          {isDesktop() && <HeaderComponent />}
 
-              {isDesktop() && (
-                <View style={styles.comments}>
-                  <CommentsComponent />
-                </View>
-              )}
+          <View style={styles.messages}>
+            <View style={styles.posts}>
+              <PostsComponent postPressHandler={showCommentOfPost} />
             </View>
 
-            {isMobile() && (
-              <View style={styles.bottomBar}>
-                <BottomBarComponent />
+            {(isDesktop() || (isMobile() && showCommentsModal)) && (
+              <View style={getCommentsStyle()}>
+                {isMobile() && (
+                  <CommentsHeaderComponent
+                    title={postTitle}
+                    onBackPressHandler={hideComments}
+                  />
+                )}
+                <CommentsComponent />
               </View>
             )}
           </View>
-        </SafeAreaView>
-      </>
-    </Provider>
+
+          {isMobile() && !showCommentsModal && (
+            <View style={styles.bottomBar}>
+              <BottomBarComponent />
+            </View>
+          )}
+        </View>
+      </SafeAreaView>
+    </>
+    // </Provider>
   );
 };
 
@@ -102,9 +155,6 @@ const styles = StyleSheet.create({
   },
   posts: {
     flex: 2,
-  },
-  comments: {
-    flex: 3,
   },
   bottomBar: {
     marginTop: 'auto',

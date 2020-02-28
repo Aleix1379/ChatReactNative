@@ -4,7 +4,7 @@ import {ScrollView, View} from 'react-native';
 import MessageComponent from './MessageComponent';
 
 interface Props {
-  postPressHandler(postId: number): void;
+  postPressHandler(postId: number, name: string): void;
 }
 
 const PostsComponent: React.FC<Props> = ({postPressHandler}) => {

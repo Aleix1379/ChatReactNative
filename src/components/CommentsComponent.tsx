@@ -1,32 +1,28 @@
-import React, {ChangeEvent} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {InitialState, RootDispatcher} from '../store/root-reducer';
-import {Button, TextInput, Text, View} from 'react-native';
+import React from 'react';
+import {Text, View} from 'react-native';
+import {shallowEqual, useSelector, connect} from 'react-redux';
+import {Comment, InitialState} from '../store/root-reducer';
 
 interface Props {}
 
 interface StateProps {
-  name: string;
-  address: string;
+  comments: Comment[];
 }
 
 const CommentsComponent: React.FC<Props> = () => {
-  const {name, address} = useSelector<InitialState, StateProps>(
+  const {comments} = useSelector<InitialState, StateProps>(
     (state: InitialState) => {
       return {
-        name: state.name,
-        address: state.address,
+        comments: state.comments,
       };
     },
     shallowEqual,
   );
 
-  const dispatch = useDispatch();
-  const rootDispatcher = new RootDispatcher(dispatch);
-
   return (
     <View>
       <Text>I am the comments</Text>
+      <Text>{JSON.stringify(comments, null, 2)}</Text>
     </View>
   );
 };
