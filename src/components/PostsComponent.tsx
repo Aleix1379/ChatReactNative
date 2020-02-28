@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {InitialState, Post, RootDispatcher} from '../store/root-reducer';
-import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import {
+  Button,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native';
 import MessageComponent from './MessageComponent';
 import {WindowUtils} from '../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
@@ -64,22 +71,45 @@ const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
     return currentPostSelectedId === postId;
   };
 
+  const getNewPostStyles = (): StyleProp<ViewStyle> => {
+    const style = {
+      marginHorizontal: 0,
+      paddingHorizontal: 4,
+      paddingVertical: 4,
+    };
+    if (WindowUtils.isDesktop()) {
+      style.marginHorizontal = 15;
+      style.paddingHorizontal = 0;
+    }
+    return style;
+  };
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View style={getPostsStyles()}>
-        {posts.map((post: Post) => (
-          <MessageComponent
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            body={post.body}
-            isSelected={isCurrentPostSelected(post.id)}
-            messagePressHandler={selectPost}
-          />
-        ))}
+    <View style={styles.postContainer}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={getPostsStyles()}>
+          {posts.map((post: Post) => (
+            <MessageComponent
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              body={post.body}
+              isSelected={isCurrentPostSelected(post.id)}
+              messagePressHandler={selectPost}
+            />
+          ))}
+        </View>
+      </ScrollView>
+
+      <View style={getNewPostStyles()}>
+        <Button title="New Post" onPress={() => console.log('new post...')} />
       </View>
-    </ScrollView>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  postContainer: {flex: 1},
+});
 
 export default PostsComponent;

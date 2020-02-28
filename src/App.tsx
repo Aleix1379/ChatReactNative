@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {useState} from 'react';
 import {
   Dimensions,
@@ -135,8 +127,6 @@ const styles = StyleSheet.create({
   },
   messages: {
     display: 'flex',
-    // height: '100%',
-    // maxHeight: '100%',
     overflow: 'scroll',
     flex: 1,
     flexDirection: 'row',
