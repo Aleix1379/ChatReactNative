@@ -5,8 +5,6 @@ import 'react-native-gesture-handler';
 import Feed from './screens/Feed';
 import Profile from './screens/User';
 
-const isWeb = Platform.OS === 'web';
-
 const Home = createStackNavigator(
   {
     Profile: Profile,
@@ -23,6 +21,6 @@ const Home = createStackNavigator(
   },
 );
 
-const container = isWeb ? createBrowserApp(Home): createAppContainer(Home);
+const container = createAppContainer(Home);
 
 export default container;

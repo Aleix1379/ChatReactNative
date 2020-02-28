@@ -1,18 +1,22 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
-import {NavigationScreenProp, NavigationState} from 'react-navigation';
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
 
 interface Props {
-  navigation: NavigationScreenProp<NavigationState>;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-const Feed: React.FC<Props> = ({navigation}) => {
+const Feed = (props: any) => {
   return (
     <View style={styles.container}>
       <Text>This is the feed screen</Text>
       <Button
         title="Go to Profile"
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => props.navigation.navigate('Profile')}
       />
     </View>
   );
