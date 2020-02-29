@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleProp,
-  View,
-  ViewStyle,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import {ScrollView, StyleProp, Text, View, ViewStyle,} from 'react-native';
 import {shallowEqual, useSelector} from 'react-redux';
-import {Comment, InitialState} from '../store/root-reducer';
-import MessageComponent from './MessageComponent';
-import {WindowUtils} from '../utils/WindowUtils';
-import theme from '../styles/theme.style';
-import Button from './Button';
+import {Comment, InitialState} from '../../store/root-reducer';
+import {WindowUtils} from '../../utils/WindowUtils';
+import Button from '../Button/Button';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
+import Message from '../Message/Message';
+import styles from './Comments.sass';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -24,7 +17,7 @@ interface StateProps {
   currentPostSelectedId: number;
 }
 
-const CommentsComponent: React.FC<Props> = ({navigation}) => {
+const Comments: React.FC<Props> = ({navigation}) => {
   const {comments, currentPostSelectedId} = useSelector<
     InitialState,
     StateProps
@@ -63,7 +56,7 @@ const CommentsComponent: React.FC<Props> = ({navigation}) => {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={getMessagesStyles()}>
           {comments.map((comment: Comment) => (
-            <MessageComponent
+            <Message
               key={comment.id}
               id={comment.id!}
               title={comment.name}
@@ -89,15 +82,4 @@ const CommentsComponent: React.FC<Props> = ({navigation}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  messageContainer: {flex: 1},
-  noPostSelectedMessage: {
-    height: WindowUtils.getWindowHeight(),
-    lineHeight: WindowUtils.getWindowHeight(),
-    textAlign: 'center',
-    fontSize: 32,
-    color: theme.SECONDARY_COLOR,
-  },
-});
-
-export default CommentsComponent;
+export default Comments;

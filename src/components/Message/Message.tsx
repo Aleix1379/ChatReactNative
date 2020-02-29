@@ -1,14 +1,15 @@
 import React from 'react';
 import {
   StyleProp,
-  StyleSheet,
   Text,
   TouchableHighlight,
   View,
   ViewStyle,
 } from 'react-native';
-import theme from '../styles/theme.style';
-import {WindowUtils} from '../utils/WindowUtils';
+import theme from '../../styles/theme.style';
+import {WindowUtils} from '../../utils/WindowUtils';
+
+import styles from './Messages.sass';
 
 interface Props {
   id: number;
@@ -18,7 +19,7 @@ interface Props {
   messagePressHandler?: (postId: number, name: string) => void;
 }
 
-const MessageComponent: React.FC<Props> = ({
+const Message: React.FC<Props> = ({
   id,
   title,
   body,
@@ -65,14 +66,4 @@ const MessageComponent: React.FC<Props> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    color: theme.SECONDARY_COLOR,
-  },
-  body: {
-    color: theme.WHITE_COLOR,
-  },
-});
-
-export default MessageComponent;
+export default Message;

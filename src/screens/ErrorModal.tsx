@@ -3,7 +3,7 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import theme from '../styles/theme.style';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import Button from '../components/Button';
+import Button from '../components/Button/Button';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;

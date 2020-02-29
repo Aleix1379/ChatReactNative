@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {InitialState, Post, RootDispatcher} from '../store/root-reducer';
 import {ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
-import MessageComponent from './MessageComponent';
 import {WindowUtils} from '../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import Button from './Button';
+import Button from './Button/Button';
+import Message from './Message/Message';
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
@@ -87,7 +87,7 @@ const PostsComponent: React.FC<Props> = ({postPressHandler, navigation}) => {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={getPostsStyles()}>
           {posts.map((post: Post) => (
-            <MessageComponent
+            <Message
               key={post.id}
               id={post.id!}
               title={post.title}

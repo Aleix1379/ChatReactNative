@@ -9,8 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import LoadingComponent from '../components/loadingComponent';
-import Button from '../components/Button';
+import Button from '../components/Button/Button';
 import theme from '../styles/theme.style';
 import CommentService from '../services/Comments';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
@@ -21,6 +20,7 @@ import {
   User,
 } from '../store/root-reducer';
 import InputTextLabel from '../components/TextInput';
+import Loading from '../components/Loading/Loading';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -81,7 +81,7 @@ const NewCommentModal: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.saveView}>
-      {showLoading && <LoadingComponent />}
+      {showLoading && <Loading />}
       {!showLoading && (
         <View style={styles.newPost}>
           <Text style={styles.title}>New comment</Text>

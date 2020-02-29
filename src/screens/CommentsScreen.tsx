@@ -1,5 +1,5 @@
 import React from 'react';
-import CommentsComponent from '../components/CommentsComponent';
+import CommentsComponent from '../components/Comments/Comments';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 
 interface Props {

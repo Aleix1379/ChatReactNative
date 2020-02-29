@@ -11,11 +11,9 @@ import {useDispatch} from 'react-redux';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 import PostsComponent from '../components/PostsComponent';
-import HeaderComponent from '../components/HeaderComponent';
-import LoadingComponent from '../components/loadingComponent';
 import {RootDispatcher} from '../store/root-reducer';
-import {WindowUtils} from '../utils/WindowUtils';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
+import Loading from '../components/Loading/Loading';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -49,9 +47,7 @@ const App: React.FC<Props> = ({navigation}) => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <View style={styles.body}>
-          {showLoading && <LoadingComponent message="Loading posts..." />}
-
-          {WindowUtils.isDesktop() && <HeaderComponent />}
+          {showLoading && <Loading message="Loading..." />}
 
           <View style={styles.messages}>
             <View style={styles.posts}>

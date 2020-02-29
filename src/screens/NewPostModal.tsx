@@ -1,22 +1,14 @@
 import React, {useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {
-  SafeAreaView,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View,} from 'react-native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {InitialState, Post, RootDispatcher, User} from '../store/root-reducer';
-import Button from '../components/Button';
+import Button from '../components/Button/Button';
 
 import theme from '../styles/theme.style';
 import PostService from '../services/Posts';
-import LoadingComponent from '../components/loadingComponent';
 import InputTextLabel from '../components/TextInput';
+import Loading from '../components/Loading/Loading';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -73,7 +65,7 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.saveView}>
-      {showLoading && <LoadingComponent message="Loading" />}
+      {showLoading && <Loading message="Loading" />}
       {!showLoading && (
         <View style={styles.newPost}>
           <Text style={styles.title}>New post</Text>
