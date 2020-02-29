@@ -65,7 +65,7 @@ const CommentsComponent: React.FC<Props> = ({navigation}) => {
           {comments.map((comment: Comment) => (
             <MessageComponent
               key={comment.id}
-              id={comment.id}
+              id={comment.id!}
               title={comment.name}
               body={comment.body}
             />

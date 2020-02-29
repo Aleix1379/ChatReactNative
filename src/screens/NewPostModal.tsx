@@ -1,6 +1,14 @@
 import React, {useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle,} from 'react-native';
+import {
+  SafeAreaView,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {InitialState, Post, RootDispatcher, User} from '../store/root-reducer';
 import Button from '../components/Button';
@@ -72,15 +80,24 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
 
   const addPost = async () => {
     setShowLoading(true);
-    const newPost = await PostService.addPost({
-      userId: userConnected.id,
-      title: title,
-      body: body,
-    });
-
-    setShowLoading(false);
-    rootDispatcher.updatePosts([...posts, newPost]);
-    navigation.goBack();
+    try {
+      const newPost = await PostService.addPost({
+        userId: userConnected.id,
+        title: title,
+        body: body,
+      });
+      setShowLoading(false);
+      rootDispatcher.updatePosts([...posts, newPost]);
+      navigation.goBack();
+    } catch (e) {
+      console.log(':::Error new POST:::');
+      console.log(e);
+      setShowLoading(false);
+      navigation.navigate('Error', {
+        title: 'Error adding a new Post',
+        message: e,
+      });
+    }
   };
 
   return (

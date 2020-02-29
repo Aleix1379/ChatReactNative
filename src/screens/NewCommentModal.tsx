@@ -14,13 +14,19 @@ import Button from '../components/Button';
 import theme from '../styles/theme.style';
 import CommentService from '../services/Comments';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {Comment, InitialState, RootDispatcher} from '../store/root-reducer';
+import {
+  Comment,
+  InitialState,
+  RootDispatcher,
+  User,
+} from '../store/root-reducer';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface StateProps {
+  userConnected: User;
   currentPostSelectedId: number;
   comments: Comment[];
 }
@@ -28,16 +34,16 @@ interface StateProps {
 const NewCommentModal: React.FC<Props> = ({navigation}) => {
   const [showLoading, setShowLoading] = useState(false);
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [body, setBody] = useState('');
 
-  const {currentPostSelectedId, comments} = useSelector<
+  const {currentPostSelectedId, comments, userConnected} = useSelector<
     InitialState,
     StateProps
   >((state: InitialState) => {
     return {
       currentPostSelectedId: state.currentPostSelectedId,
       comments: state.comments,
+      userConnected: state.userConnected,
     };
   }, shallowEqual);
 
@@ -80,16 +86,26 @@ const NewCommentModal: React.FC<Props> = ({navigation}) => {
 
   const addMessage = async () => {
     setShowLoading(true);
-    const newComment = await CommentService.addComment({
-      postId: currentPostSelectedId,
-      name: name,
-      email: email,
-      body: body,
-    });
+    try {
+      const newComment = await CommentService.addComment({
+        postId: currentPostSelectedId,
+        name: name,
+        email: userConnected.email,
+        body: body,
+      });
 
-    setShowLoading(false);
-    rootDispatcher.updateComments([...comments, newComment]);
-    navigation.goBack();
+      setShowLoading(false);
+      rootDispatcher.updateComments([...comments, newComment]);
+      navigation.goBack();
+    } catch (e) {
+      console.log(':::Error new COMMENT:::');
+      console.log(e);
+      setShowLoading(false);
+      navigation.navigate('Error', {
+        title: 'Error adding a new message',
+        message: e,
+      });
+    }
   };
 
   return (
@@ -105,12 +121,6 @@ const NewCommentModal: React.FC<Props> = ({navigation}) => {
             onChangeText={text => setName(text)}
           />
           <TextInput
-            style={getInputStyle()}
-            value={email}
-            placeholder="Email"
-            onChangeText={text => setEmail(text)}
-          />
-          <TextInput
             style={getInputStyle(true)}
             multiline
             placeholder="Body"
@@ -119,7 +129,7 @@ const NewCommentModal: React.FC<Props> = ({navigation}) => {
           />
 
           <View style={styles.button}>
-            <Button title="SAVE" onPress={cancel} />
+            <Button title="CANCEL" onPress={cancel} />
           </View>
 
           <View style={styles.button}>
