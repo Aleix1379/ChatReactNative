@@ -36,7 +36,6 @@ target 'ChatReactNative' do
 
   pod 'RNGestureHandler', :podspec => '../node_modules/react-native-gesture-handler/RNGestureHandler.podspec'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'ChatReactNativeTests' do
     inherit! :search_paths
