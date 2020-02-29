@@ -63,7 +63,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
         rootDispatcher.updatePosts(data);
       })
       .catch(err => console.error(err));
-  }, [rootDispatcher]);
+  }, []);
 
   const getPostsStyles = (): StyleProp<ViewStyle> => {
     let style = {
@@ -100,7 +100,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
   return (
     <View style={styles.postContainer}>
       <View style={styles.header}>
-        <Image style={styles.avatar} source={userConnected.image} />
+        {userConnected.image.uri && <Image style={styles.avatar} source={userConnected.image} />}
         <Text style={styles.title}>{userConnected.name}</Text>
       </View>
       <ScrollView contentInsetAdjustmentBehavior="automatic">

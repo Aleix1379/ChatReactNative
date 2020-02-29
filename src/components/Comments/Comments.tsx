@@ -66,8 +66,14 @@ const Comments: React.FC<Props> = ({navigation}) => {
         </View>
 
         {currentPostSelectedId === -1 && (
-          <Text style={styles.noPostSelectedMessage}>
+          <Text style={styles.noData}>
             Choose a post to see the coments
+          </Text>
+        )}
+
+        {comments.length === 0 && (
+          <Text style={styles.noData}>
+            There is no comments send a message to be the first
           </Text>
         )}
       </ScrollView>

@@ -1,2 +1,2 @@
 export const messageContainer: string;
-export const noPostSelectedMessage: string;
+export const noData: string;
