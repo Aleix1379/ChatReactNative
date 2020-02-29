@@ -74,33 +74,31 @@ const NewCommentModal: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.saveView}>
       {showLoading && <Loading />}
-      {!showLoading && (
-        <View style={styles.newPost}>
-          <Text style={styles.title}>New comment</Text>
+      <View style={styles.newPost}>
+        <Text style={styles.title}>New comment</Text>
 
-          <InputTextLabel
-            label="Title"
-            value={name}
-            placeholder="Introduce the title"
-            onChangeText={text => setName(text)}
-          />
-          <InputTextLabel
-            label="Comment"
-            value={body}
-            placeholder="Introduce the comment"
-            multiline={true}
-            onChangeText={text => setBody(text)}
-          />
+        <InputTextLabel
+          label="Title"
+          value={name}
+          placeholder="Introduce the title"
+          onChangeText={text => setName(text)}
+        />
+        <InputTextLabel
+          label="Comment"
+          value={body}
+          placeholder="Introduce the comment"
+          multiline={true}
+          onChangeText={text => setBody(text)}
+        />
 
-          <View style={styles.button}>
-            <Button title="CANCEL" onPress={cancel} />
-          </View>
-
-          <View style={styles.button}>
-            <Button title="SAVE" onPress={addMessage} />
-          </View>
+        <View style={styles.button}>
+          <Button title="CANCEL" onPress={cancel} />
         </View>
-      )}
+
+        <View style={styles.button}>
+          <Button title="SAVE" onPress={addMessage} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

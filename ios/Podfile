@@ -37,6 +37,7 @@ target 'ChatReactNative' do
   pod 'RNGestureHandler', :podspec => '../node_modules/react-native-gesture-handler/RNGestureHandler.podspec'
 
 
+
   target 'ChatReactNativeTests' do
     inherit! :search_paths
     # Pods for testing

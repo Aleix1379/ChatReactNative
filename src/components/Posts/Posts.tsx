@@ -5,7 +5,14 @@ import {
   RootDispatcher,
   User,
 } from '../../store/root-reducer';
-import {ScrollView, StyleProp, View, ViewStyle, Text} from 'react-native';
+import {
+  ScrollView,
+  StyleProp,
+  View,
+  ViewStyle,
+  Text,
+  Image,
+} from 'react-native';
 import {WindowUtils} from '../../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
@@ -56,7 +63,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
         rootDispatcher.updatePosts(data);
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [rootDispatcher]);
 
   const getPostsStyles = (): StyleProp<ViewStyle> => {
     let style = {
@@ -92,7 +99,10 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
 
   return (
     <View style={styles.postContainer}>
-      <Text style={styles.title}>Welcome: {userConnected.name}</Text>
+      <View style={styles.header}>
+        <Image style={styles.avatar} source={userConnected.image} />
+        <Text style={styles.title}>{userConnected.name}</Text>
+      </View>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={getPostsStyles()}>
           {posts.map((post: Post) => (

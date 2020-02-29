@@ -1,4 +1,5 @@
 import {Action, Dispatch, Reducer} from 'redux';
+import {ImageURISource} from "react-native";
 
 export interface InitialState {
   posts: Post[];
@@ -25,6 +26,7 @@ export interface Comment {
 export interface User {
   id: number;
   name: string;
+  image: ImageURISource;
   email: string;
 }
 
@@ -35,6 +37,7 @@ export const initialState: InitialState = {
   userConnected: {
     id: 1,
     name: 'Aleix',
+    image: {},
     email: 'aleix@steerpath.com',
   },
 };

@@ -72,32 +72,30 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={styles.saveView}>
       {showLoading && <Loading message="Loading" />}
-      {!showLoading && (
-        <View style={styles.newPost}>
-          <Text style={styles.title}>New post</Text>
-          <InputTextLabel
-            label="Title"
-            value={title}
-            placeholder="Introduce the title"
-            onChangeText={text => setTitle(text)}
-          />
-          <InputTextLabel
-            label="Post"
-            value={body}
-            placeholder="Introduce the post"
-            multiline={true}
-            onChangeText={text => setBody(text)}
-          />
+      <View style={styles.newPost}>
+        <Text style={styles.title}>New post</Text>
+        <InputTextLabel
+          label="Title"
+          value={title}
+          placeholder="Introduce the title"
+          onChangeText={text => setTitle(text)}
+        />
+        <InputTextLabel
+          label="Post"
+          value={body}
+          placeholder="Introduce the post"
+          multiline={true}
+          onChangeText={text => setBody(text)}
+        />
 
-          <View style={styles.button}>
-            <Button title="CANCEL" onPress={cancel} />
-          </View>
-
-          <View style={styles.button}>
-            <Button title="SAVE" onPress={addPost} />
-          </View>
+        <View style={styles.button}>
+          <Button title="CANCEL" onPress={cancel} />
         </View>
-      )}
+
+        <View style={styles.button}>
+          <Button title="SAVE" onPress={addPost} />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
