@@ -1,5 +1,8 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+
+import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+
 import 'react-native-gesture-handler';
 
 import CommentsScreen from './screens/CommentsScreen/CommentsScreen';
@@ -10,7 +13,7 @@ import NewPostModal from './screens/NewPostModal/NewPostModal';
 import NewCommentModal from './screens/NewCommentModal/NewCommentModal';
 import ErrorModal from './screens/ErrorModal/ErrorModal';
 
-const Home = createStackNavigator(
+const HomeStack = createStackNavigator(
   {
     Posts: {
       screen: PostsScreen,
@@ -53,6 +56,31 @@ const Home = createStackNavigator(
   },
 );
 
-const container = createAppContainer(Home);
+const BottomTabNavigator = createMaterialBottomTabNavigator(
+  {
+    Home: {
+      screen: HomeStack,
+    },
+    Profile: {
+      screen: HomeStack,
+    },
+  },
+  {
+    initialRouteName: 'Home',
+  },
+);
 
-export default container;
+// const container = createAppContainer(Home);
+
+export default createAppContainer(
+  createSwitchNavigator(
+    {
+      App: BottomTabNavigator,
+    },
+    {
+      initialRouteName: 'App',
+    },
+  ),
+);
+
+// export default container;
