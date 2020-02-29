@@ -35,7 +35,8 @@
     "react-redux": "^7.2.0",
     "react-scripts": "^3.4.0",
     "redux": "^4.0.5",
-    "@react-navigation/native": "latest"
+    "@react-navigation/native": "latest",
+    "axios": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

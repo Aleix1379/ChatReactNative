@@ -1,8 +1,10 @@
 import React from 'react';
-import {Text} from 'react-native';
+import CommentsComponent from '../components/CommentsComponent';
 
-const CommentsScreen = () => {
-  return <Text>COMMENTS!!!</Text>;
+interface Props {}
+
+const CommentsScreen: React.FC<Props> = () => {
+  return <CommentsComponent />;
 };
 
 export default CommentsScreen;

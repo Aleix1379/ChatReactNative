@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
-    zIndex: 1000,
+    zIndex: 100000,
     backgroundColor: 'rgba(66,66,66,0.8)',
   },
   indicator: {

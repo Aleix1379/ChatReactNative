@@ -2,20 +2,42 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import 'react-native-gesture-handler';
 
-import Feed from './screens/Feed';
-import Profile from './screens/User';
+import CommentsScreen from './screens/CommentsScreen';
+import PostsScreen from './screens/PostsScreen';
+
+import theme from './styles/theme.style';
+import NewPostModal from './screens/NewPostModal';
 
 const Home = createStackNavigator(
   {
-    Profile: Profile,
-    Feed: Feed,
+    Posts: {
+      screen: PostsScreen,
+      navigationOptions: {headerShown: false},
+    },
+    Comments: {
+      screen: CommentsScreen,
+      navigationOptions: ({navigation}) => {
+        if (
+          navigation &&
+          navigation.state &&
+          navigation.state.params &&
+          navigation.state.params.title
+        ) {
+          return {title: navigation.state.params.title};
+        }
+      },
+    },
+    NewPost: {
+      screen: NewPostModal,
+      navigationOptions: {headerShown: false},
+    },
   },
   {
-    initialRouteName: 'Profile',
+    initialRouteName: 'Posts',
     navigationOptions: {
-      headerTintColor: '#fff',
+      headerTintColor: theme.SECONDARY_COLOR,
       headerStyle: {
-        backgroundColor: '#000',
+        backgroundColor: theme.PRIMARY_COLOR,
       },
     },
   },

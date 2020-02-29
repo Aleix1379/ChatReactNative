@@ -1,32 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {InitialState, Post, RootDispatcher} from '../store/root-reducer';
-import {
-  Button,
-  ScrollView,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import MessageComponent from './MessageComponent';
 import {WindowUtils} from '../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import {NavigationScreenProp, NavigationState} from 'react-navigation';
+import Button from './Button';
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
+  navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface StateProps {
   currentPostSelectedId: number;
+  posts: Post[];
 }
 
-const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
-  const [posts, setPosts] = useState([]);
+const PostsComponent: React.FC<Props> = ({postPressHandler, navigation}) => {
+  // const [posts, setPosts] = useState([]);
 
-  const {currentPostSelectedId} = useSelector<InitialState, StateProps>(
+  const {posts, currentPostSelectedId} = useSelector<InitialState, StateProps>(
     (state: InitialState) => {
       return {
         currentPostSelectedId: state.currentPostSelectedId,
+        posts: state.posts,
       };
     },
     shallowEqual,
@@ -47,7 +45,7 @@ const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
 
     fetchData()
       .then(data => {
-        setPosts(data);
+        rootDispatcher.updatePosts(data);
       })
       .catch(err => console.error(err));
   }, []);
@@ -102,7 +100,10 @@ const PostsComponent: React.FC<Props> = ({postPressHandler}) => {
       </ScrollView>
 
       <View style={getNewPostStyles()}>
-        <Button title="New Post" onPress={() => console.log('new post...')} />
+        <Button
+          title="New Post"
+          onPress={() => navigation.navigate('NewPost')}
+        />
       </View>
     </View>
   );

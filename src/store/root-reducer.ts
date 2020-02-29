@@ -1,12 +1,14 @@
 import {Action, Dispatch, Reducer} from 'redux';
 
 export interface InitialState {
+  posts: Post[];
   comments: Comment[];
   currentPostSelectedId: number;
+  userConnected: User;
 }
 
 export interface Post {
-  id: number;
+  id?: number;
   userId: number;
   title: string;
   body: string;
@@ -20,9 +22,19 @@ export interface Comment {
   body: string;
 }
 
+export interface User {
+  id: number;
+  email: string;
+}
+
 export const initialState: InitialState = {
+  posts: [],
   comments: [],
   currentPostSelectedId: -1,
+  userConnected: {
+    id: 1,
+    email: 'aleix@steerpath.com',
+  },
 };
 
 export interface DispatchAction extends Action<ActionType> {
@@ -30,6 +42,7 @@ export interface DispatchAction extends Action<ActionType> {
 }
 
 export enum ActionType {
+  UpdatePosts,
   UpdateComments,
   SelectPost,
 }
@@ -38,7 +51,9 @@ export const rootReducer: Reducer<InitialState, DispatchAction> = (
   state = initialState,
   action,
 ) => {
-  if (action.type === ActionType.UpdateComments) {
+  if (action.type === ActionType.UpdatePosts) {
+    return {...state, posts: action.payload.posts || []};
+  } else if (action.type === ActionType.UpdateComments) {
     return {...state, comments: action.payload.comments || []};
   } else if (action.type === ActionType.SelectPost) {
     return {
@@ -56,6 +71,10 @@ export class RootDispatcher {
   constructor(dispatch: Dispatch<DispatchAction>) {
     this.dispatch = dispatch;
   }
+
+  updatePosts = (posts: Post[]) => {
+    this.dispatch({type: ActionType.UpdatePosts, payload: {posts}});
+  };
 
   updateComments = (comments: Comment[]) => {
     this.dispatch({type: ActionType.UpdateComments, payload: {comments}});
