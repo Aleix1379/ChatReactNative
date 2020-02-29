@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
-import {InitialState, Post, RootDispatcher} from '../../store/root-reducer';
-import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import {
+  InitialState,
+  Post,
+  RootDispatcher,
+  User,
+} from '../../store/root-reducer';
+import {ScrollView, StyleProp, View, ViewStyle, Text} from 'react-native';
 import {WindowUtils} from '../../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
@@ -11,24 +16,27 @@ import styles from './Posts.sass';
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
+
   navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface StateProps {
   currentPostSelectedId: number;
+  userConnected: User;
   posts: Post[];
 }
 
 const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
-  const {posts, currentPostSelectedId} = useSelector<InitialState, StateProps>(
-    (state: InitialState) => {
-      return {
-        posts: state.posts,
-        currentPostSelectedId: state.currentPostSelectedId,
-      };
-    },
-    shallowEqual,
-  );
+  const {posts, currentPostSelectedId, userConnected} = useSelector<
+    InitialState,
+    StateProps
+  >((state: InitialState) => {
+    return {
+      posts: state.posts,
+      currentPostSelectedId: state.currentPostSelectedId,
+      userConnected: state.userConnected,
+    };
+  }, shallowEqual);
 
   const dispatch = useDispatch();
   const rootDispatcher = new RootDispatcher(dispatch);
@@ -84,6 +92,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
 
   return (
     <View style={styles.postContainer}>
+      <Text style={styles.title}>Welcome: {userConnected.name}</Text>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={getPostsStyles()}>
           {posts.map((post: Post) => (
