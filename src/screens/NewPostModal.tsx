@@ -16,6 +16,7 @@ import Button from '../components/Button';
 import theme from '../styles/theme.style';
 import PostService from '../services/Posts';
 import LoadingComponent from '../components/loadingComponent';
+import InputTextLabel from '../components/TextInput';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -43,36 +44,6 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
 
   const dispatch = useDispatch();
   const rootDispatcher = new RootDispatcher(dispatch);
-
-  const getInputStyle = (multiline = false): StyleProp<ViewStyle> => {
-    const inputStyle = {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-
-      elevation: 5,
-
-      backgroundColor: '#fff',
-      width: '100%',
-      marginTop: 8,
-      marginBottom: 8,
-      height: 40,
-      paddingHorizontal: 12,
-      paddingVertical: 12,
-      borderRadius: 3,
-      textAlignVertical: 'top',
-    };
-
-    if (multiline) {
-      inputStyle.height = 150;
-    }
-
-    return inputStyle;
-  };
 
   const cancel = () => {
     navigation.goBack();
@@ -106,17 +77,17 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
       {!showLoading && (
         <View style={styles.newPost}>
           <Text style={styles.title}>New post</Text>
-          <TextInput
-            style={getInputStyle()}
+          <InputTextLabel
+            label="Title"
             value={title}
-            placeholder="Title"
+            placeholder="Introduce the title"
             onChangeText={text => setTitle(text)}
           />
-          <TextInput
-            style={getInputStyle(true)}
-            multiline
-            placeholder="Body"
+          <InputTextLabel
+            label="Post"
             value={body}
+            placeholder="Introduce the post"
+            multiline={true}
             onChangeText={text => setBody(text)}
           />
 
