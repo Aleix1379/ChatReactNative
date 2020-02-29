@@ -101,7 +101,7 @@ const PostsComponent: React.FC<Props> = ({postPressHandler, navigation}) => {
 
       <View style={getNewPostStyles()}>
         <Button
-          title="New Post"
+          title="New post"
           onPress={() => navigation.navigate('NewPost')}
         />
       </View>

@@ -1,37 +1,45 @@
 import React, {useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle,} from 'react-native';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {InitialState, Post, RootDispatcher, User} from '../store/root-reducer';
-import Button from '../components/Button';
-
-import theme from '../styles/theme.style';
-import PostService from '../services/Posts';
+import {
+  SafeAreaView,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
 import LoadingComponent from '../components/loadingComponent';
+import Button from '../components/Button';
+import theme from '../styles/theme.style';
+import CommentService from '../services/Comments';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import {Comment, InitialState, RootDispatcher} from '../store/root-reducer';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface StateProps {
-  userConnected: User;
-  posts: Post[];
+  currentPostSelectedId: number;
+  comments: Comment[];
 }
 
-const NewPostModal: React.FC<Props> = ({navigation}) => {
+const NewCommentModal: React.FC<Props> = ({navigation}) => {
   const [showLoading, setShowLoading] = useState(false);
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [body, setBody] = useState('');
 
-  const {posts, userConnected} = useSelector<InitialState, StateProps>(
-    (state: InitialState) => {
-      return {
-        userConnected: state.userConnected,
-        posts: state.posts,
-      };
-    },
-    shallowEqual,
-  );
+  const {currentPostSelectedId, comments} = useSelector<
+    InitialState,
+    StateProps
+  >((state: InitialState) => {
+    return {
+      currentPostSelectedId: state.currentPostSelectedId,
+      comments: state.comments,
+    };
+  }, shallowEqual);
 
   const dispatch = useDispatch();
   const rootDispatcher = new RootDispatcher(dispatch);
@@ -70,16 +78,17 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
     navigation.goBack();
   };
 
-  const addPost = async () => {
+  const addMessage = async () => {
     setShowLoading(true);
-    const newPost = await PostService.addPost({
-      userId: userConnected.id,
-      title: title,
+    const newComment = await CommentService.addComment({
+      postId: currentPostSelectedId,
+      name: name,
+      email: email,
       body: body,
     });
 
     setShowLoading(false);
-    rootDispatcher.updatePosts([...posts, newPost]);
+    rootDispatcher.updateComments([...comments, newComment]);
     navigation.goBack();
   };
 
@@ -88,12 +97,18 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
       {showLoading && <LoadingComponent />}
       {!showLoading && (
         <View style={styles.newPost}>
-          <Text style={styles.title}>New post</Text>
+          <Text style={styles.title}>New comment</Text>
           <TextInput
             style={getInputStyle()}
-            value={title}
+            value={name}
             placeholder="Title"
-            onChangeText={text => setTitle(text)}
+            onChangeText={text => setName(text)}
+          />
+          <TextInput
+            style={getInputStyle()}
+            value={email}
+            placeholder="Email"
+            onChangeText={text => setEmail(text)}
           />
           <TextInput
             style={getInputStyle(true)}
@@ -104,11 +119,11 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
           />
 
           <View style={styles.button}>
-            <Button title="CANCEL" onPress={cancel} />
+            <Button title="SAVE" onPress={cancel} />
           </View>
 
           <View style={styles.button}>
-            <Button title="SAVE" onPress={addPost} />
+            <Button title="SAVE" onPress={addMessage} />
           </View>
         </View>
       )}
@@ -138,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewPostModal;
+export default NewCommentModal;

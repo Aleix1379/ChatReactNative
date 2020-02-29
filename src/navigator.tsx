@@ -7,6 +7,7 @@ import PostsScreen from './screens/PostsScreen';
 
 import theme from './styles/theme.style';
 import NewPostModal from './screens/NewPostModal';
+import NewCommentModal from './screens/NewCommentModal';
 
 const Home = createStackNavigator(
   {
@@ -29,6 +30,10 @@ const Home = createStackNavigator(
     },
     NewPost: {
       screen: NewPostModal,
+      navigationOptions: {headerShown: false},
+    },
+    NewComment: {
+      screen: NewCommentModal,
       navigationOptions: {headerShown: false},
     },
   },
