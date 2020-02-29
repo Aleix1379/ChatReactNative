@@ -1,9 +1,8 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-
-import theme from '../styles/theme.style';
+import {SafeAreaView, Text, View} from 'react-native';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import Button from '../components/Button/Button';
+import Button from '../../components/Button/Button';
+import styles from './ErrorModal.sass';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -22,22 +21,5 @@ const ErrorModal: React.FC<Props> = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  saveView: {
-    flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  message: {
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: theme.SECONDARY_COLOR,
-    marginBottom: 8,
-  },
-  button: {
-    marginTop: 'auto',
-  },
-});
 
 export default ErrorModal;

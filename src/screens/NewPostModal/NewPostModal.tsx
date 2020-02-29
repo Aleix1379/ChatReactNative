@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, StyleSheet, Text, View,} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {InitialState, Post, RootDispatcher, User} from '../store/root-reducer';
-import Button from '../components/Button/Button';
-
-import theme from '../styles/theme.style';
-import PostService from '../services/Posts';
-import InputTextLabel from '../components/TextInputLabel/TextInput';
-import Loading from '../components/Loading/Loading';
+import {
+  InitialState,
+  Post,
+  RootDispatcher,
+  User,
+} from '../../store/root-reducer';
+import Button from '../../components/Button/Button';
+import PostService from '../../services/Posts';
+import InputTextLabel from '../../components/TextInputLabel/TextInput';
+import Loading from '../../components/Loading/Loading';
+import styles from './NewPostModal.sass';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -49,15 +53,9 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
         title: title,
         body: body,
       };
-      console.log('CREATRING POST:');
-      console.log(post);
       const newPost = await PostService.addPost(post);
-      console.log('RESULT POST CREATED:');
-      console.log(newPost);
       setShowLoading(false);
       let postsUpdated = [...posts, newPost];
-      console.log('POST UPDATED:');
-      console.log(postsUpdated);
       rootDispatcher.updatePosts(postsUpdated);
       navigation.goBack();
     } catch (e) {
@@ -103,27 +101,5 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  saveView: {
-    flex: 1,
-  },
-  newPost: {
-    flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  title: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 22,
-    color: theme.DARK_COLOR,
-    marginBottom: 8,
-  },
-  button: {
-    marginTop: 16,
-    width: '100%',
-  },
-});
 
 export default NewPostModal;

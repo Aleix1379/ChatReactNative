@@ -2,13 +2,13 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import 'react-native-gesture-handler';
 
-import CommentsScreen from './screens/CommentsScreen';
-import PostsScreen from './screens/PostsScreen';
+import CommentsScreen from './screens/CommentsScreen/CommentsScreen';
+import PostsScreen from './screens/PostsScreen/PostsScreen';
 
 import theme from './styles/theme.style';
-import NewPostModal from './screens/NewPostModal';
-import NewCommentModal from './screens/NewCommentModal';
-import ErrorModal from './screens/ErrorModal';
+import NewPostModal from './screens/NewPostModal/NewPostModal';
+import NewCommentModal from './screens/NewCommentModal/NewCommentModal';
+import ErrorModal from './screens/ErrorModal/ErrorModal';
 
 const Home = createStackNavigator(
   {

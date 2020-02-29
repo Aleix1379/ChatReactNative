@@ -1,5 +1,5 @@
 import React from 'react';
-import CommentsComponent from '../components/Comments/Comments';
+import Comments from '../../components/Comments/Comments';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const CommentsScreen: React.FC<Props> = ({navigation}) => {
-  return <CommentsComponent navigation={navigation} />;
+  return <Comments navigation={navigation} />;
 };
 
 export default CommentsScreen;
