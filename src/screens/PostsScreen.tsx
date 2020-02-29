@@ -10,7 +10,7 @@ import {
 import {useDispatch} from 'react-redux';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
-import PostsComponent from '../components/PostsComponent';
+import Posts from '../components/Posts/Posts';
 import {RootDispatcher} from '../store/root-reducer';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import Loading from '../components/Loading/Loading';
@@ -51,7 +51,7 @@ const App: React.FC<Props> = ({navigation}) => {
 
           <View style={styles.messages}>
             <View style={styles.posts}>
-              <PostsComponent
+              <Posts
                 navigation={navigation}
                 postPressHandler={showCommentOfPost}
               />

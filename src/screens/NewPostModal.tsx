@@ -7,7 +7,7 @@ import Button from '../components/Button/Button';
 
 import theme from '../styles/theme.style';
 import PostService from '../services/Posts';
-import InputTextLabel from '../components/TextInput';
+import InputTextLabel from '../components/TextInputLabel/TextInput';
 import Loading from '../components/Loading/Loading';
 
 interface Props {
@@ -44,13 +44,21 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
   const addPost = async () => {
     setShowLoading(true);
     try {
-      const newPost = await PostService.addPost({
+      let post = {
         userId: userConnected.id,
         title: title,
         body: body,
-      });
+      };
+      console.log('CREATRING POST:');
+      console.log(post);
+      const newPost = await PostService.addPost(post);
+      console.log('RESULT POST CREATED:');
+      console.log(newPost);
       setShowLoading(false);
-      rootDispatcher.updatePosts([...posts, newPost]);
+      let postsUpdated = [...posts, newPost];
+      console.log('POST UPDATED:');
+      console.log(postsUpdated);
+      rootDispatcher.updatePosts(postsUpdated);
       navigation.goBack();
     } catch (e) {
       console.log(':::Error new POST:::');
