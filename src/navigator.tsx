@@ -12,8 +12,12 @@ import theme from './styles/theme.style';
 import NewPostModal from './screens/NewPostModal/NewPostModal';
 import NewCommentModal from './screens/NewCommentModal/NewCommentModal';
 import ErrorModal from './screens/ErrorModal/ErrorModal';
+import UserScreen from './screens/UserScreen/UserScreen';
+import React from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faUser, faComments} from '@fortawesome/free-solid-svg-icons';
 
-const HomeStack = createStackNavigator(
+const PostsStack = createStackNavigator(
   {
     Posts: {
       screen: PostsScreen,
@@ -56,17 +60,48 @@ const HomeStack = createStackNavigator(
   },
 );
 
-const BottomTabNavigator = createMaterialBottomTabNavigator(
+const UserStack = createStackNavigator(
   {
-    Home: {
-      screen: HomeStack,
-    },
-    Profile: {
-      screen: HomeStack,
+    User: {
+      screen: UserScreen,
+      navigationOptions: {headerShown: false},
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'User',
+    navigationOptions: {
+      headerTintColor: theme.SECONDARY_COLOR,
+      headerStyle: {
+        backgroundColor: theme.PRIMARY_COLOR,
+      },
+    },
+  },
+);
+
+const BottomTabNavigator = createMaterialBottomTabNavigator(
+  {
+    Posts: {
+      screen: PostsStack,
+      navigationOptions: {
+        tabBarIcon: ({tintColor}) => (
+          <FontAwesomeIcon size={22} color={tintColor} icon={faComments} />
+        ),
+      },
+    },
+    Profile: {
+      screen: UserStack,
+      navigationOptions: {
+        tabBarIcon: ({tintColor}) => (
+          <FontAwesomeIcon size={22} color={tintColor} icon={faUser} />
+        ),
+      },
+    },
+  },
+  {
+    initialRouteName: 'Posts',
+    activeColor: theme.SECONDARY_COLOR,
+    inactiveColor: theme.LIGHT_COLOR,
+    barStyle: {backgroundColor: theme.PRIMARY_COLOR},
   },
 );
 
