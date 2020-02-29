@@ -88,6 +88,11 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
         <View style={styles.button}>
           <Button title="CHANGE AVATAR" onPress={updatePicture} />
         </View>
+
+        <View style={styles.button}>
+          <Button title="SHOW YOUR LOCATION ON A MAP" onPress={() => navigation.navigate('Map')} />
+        </View>
+
         <View style={styles.button}>
           <Button title="SAVE" onPress={updateProfile} />
         </View>

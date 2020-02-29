@@ -16,6 +16,7 @@ import UserScreen from './screens/UserScreen/UserScreen';
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faUser, faComments} from '@fortawesome/free-solid-svg-icons';
+import MapScreen from "./screens/MapScreen/MapScreen";
 
 const PostsStack = createStackNavigator(
   {
@@ -66,6 +67,7 @@ const UserStack = createStackNavigator(
       screen: UserScreen,
       navigationOptions: {headerShown: false},
     },
+    Map: MapScreen,
   },
   {
     initialRouteName: 'User',
