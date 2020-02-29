@@ -49,7 +49,7 @@ const App: React.FC<Props> = ({navigation}) => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <View style={styles.body}>
-          {showLoading && <LoadingComponent />}
+          {showLoading && <LoadingComponent message="Loading posts..." />}
 
           {WindowUtils.isDesktop() && <HeaderComponent />}
 

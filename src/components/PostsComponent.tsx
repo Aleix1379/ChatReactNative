@@ -89,10 +89,10 @@ const PostsComponent: React.FC<Props> = ({postPressHandler, navigation}) => {
           {posts.map((post: Post) => (
             <MessageComponent
               key={post.id}
-              id={post.id}
+              id={post.id!}
               title={post.title}
               body={post.body}
-              isSelected={isCurrentPostSelected(post.id)}
+              isSelected={isCurrentPostSelected(post.id!)}
               messagePressHandler={selectPost}
             />
           ))}

@@ -73,7 +73,7 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.saveView}>
-      {showLoading && <LoadingComponent />}
+      {showLoading && <LoadingComponent message="Loading" />}
       {!showLoading && (
         <View style={styles.newPost}>
           <Text style={styles.title}>New post</Text>
