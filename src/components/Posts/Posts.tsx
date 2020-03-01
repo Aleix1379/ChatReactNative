@@ -124,6 +124,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
                     <Image style={styles.avatar} source={userConnected.image}/>
                 )}
                 <Text style={styles.title}>{userConnected.name}</Text>
+                <Text style={styles.title}>{userConnected.email}</Text>
             </View>
 
             <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -135,7 +136,7 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
                 <View style={getPostsStyles()}>
                     {posts.map((post: Post) => (
                         <Message
-                            key={post.id}
+                            key={post.id + post.title}
                             id={post.id!}
                             title={post.title}
                             body={post.body}

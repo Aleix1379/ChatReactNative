@@ -90,6 +90,7 @@ const Comments: React.FC<Props> = ({navigation}) => {
               key={comment.id}
               id={comment.id!}
               title={comment.name}
+              email={comment.email}
               body={comment.body}
             />
           ))}

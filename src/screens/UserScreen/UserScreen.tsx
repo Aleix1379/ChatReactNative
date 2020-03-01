@@ -19,14 +19,10 @@ interface StateProps {
   userConnected: User;
 }
 
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
 const UserScreen: React.FC<Props> = ({navigation}) => {
   const [showLoading, setShowLoading] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [coords, setCoords] = useState({latitude: 0, longitude: 0});
   const [location, setLocation] = useState('');
   const [avatar, setAvatar] = useState<ImageURISource>({});
@@ -45,7 +41,7 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
   const updateProfile = () => {
     setShowLoading(true);
     setTimeout(() => {
-      const user = {...userConnected, name};
+      const user = {...userConnected, name, email};
       user.image = avatar;
       rootDispatcher.updateUser(user);
       setShowLoading(false);
@@ -78,6 +74,9 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
   };
 
   useEffect(() => {
+    setName(userConnected.name);
+    setEmail(userConnected.email);
+
     Geolocation.getCurrentPosition(info => {
       setCoords(info.coords);
 
@@ -97,12 +96,21 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.saveView}>
       {showLoading && <Loading />}
       <View style={styles.userProfile}>
-        <View style={styles.name}>
+        <View style={styles.input}>
           <InputTextLabel
             label="Name"
             value={name}
             placeholder="Introduce the name"
             onChangeText={text => setName(text)}
+          />
+        </View>
+
+        <View style={styles.input}>
+          <InputTextLabel
+            label="Email"
+            value={email}
+            placeholder="Introduce the name"
+            onChangeText={text => setEmail(text)}
           />
         </View>
 
