@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, View, Image, ImageURISource} from 'react-native';
+import {SafeAreaView, View, Image, ImageURISource, Text} from 'react-native';
 import styles from './UserScreen.sass';
 import InputTextLabel from '../../components/TextInputLabel/TextInput';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
@@ -8,6 +8,8 @@ import {InitialState, RootDispatcher, User} from '../../store/root-reducer';
 import Button from '../../components/Button/Button';
 import ImagePicker from 'react-native-image-picker';
 import Loading from '../../components/Loading/Loading';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoder';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -17,9 +19,16 @@ interface StateProps {
   userConnected: User;
 }
 
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
 const UserScreen: React.FC<Props> = ({navigation}) => {
   const [showLoading, setShowLoading] = useState(false);
   const [name, setName] = useState('');
+  const [coords, setCoords] = useState({latitude: 0, longitude: 0});
+  const [location, setLocation] = useState('');
   const [avatar, setAvatar] = useState<ImageURISource>({});
   const {userConnected} = useSelector<InitialState, StateProps>(
     (state: InitialState) => {
@@ -53,8 +62,6 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
     };
 
     ImagePicker.showImagePicker(options, response => {
-      // console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -69,6 +76,22 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
       }
     });
   };
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      setCoords(info.coords);
+
+      Geocoder.geocodePosition({
+        lat: info.coords.latitude,
+        lng: info.coords.longitude,
+      }).then((res: any) => {
+        const currentPostion = res[0];
+        if (currentPostion) {
+          setLocation(currentPostion.formattedAddress);
+        }
+      });
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.saveView}>
@@ -89,8 +112,27 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
           <Button title="CHANGE AVATAR" onPress={updatePicture} />
         </View>
 
+        {location.length > 0 && <Text style={styles.location}>{location}</Text>}
+
         <View style={styles.button}>
-          <Button title="SHOW YOUR LOCATION ON A MAP" onPress={() => navigation.navigate('Map')} />
+          <Button
+            title="SHOW YOUR LOCATION ON A MAP"
+            onPress={() =>
+              navigation.navigate('Map', {coords: coords, title: location})
+            }
+          />
+        </View>
+
+        <View style={styles.button}>
+          <Button
+            title="SHARE YOUR LOCATION"
+            onPress={() =>
+              navigation.navigate('ShareLocation', {
+                coords: coords,
+                location: location,
+              })
+            }
+          />
         </View>
 
         <View style={styles.button}>

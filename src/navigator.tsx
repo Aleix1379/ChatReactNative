@@ -16,7 +16,8 @@ import UserScreen from './screens/UserScreen/UserScreen';
 import React from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faUser, faComments} from '@fortawesome/free-solid-svg-icons';
-import MapScreen from "./screens/MapScreen/MapScreen";
+import MapScreen from './screens/MapScreen/MapScreen';
+import ShareLocationScreen from './screens/ShareLocationScreen/ShareLocationScreen';
 
 const PostsStack = createStackNavigator(
   {
@@ -52,11 +53,18 @@ const PostsStack = createStackNavigator(
   },
   {
     initialRouteName: 'Posts',
-    navigationOptions: {
-      headerTintColor: theme.SECONDARY_COLOR,
-      headerStyle: {
-        backgroundColor: theme.PRIMARY_COLOR,
-      },
+    navigationOptions: ({navigation}) => {
+      let tabBarVisible = true;
+      if (navigation.state.index > 0) {
+        tabBarVisible = false;
+      }
+      return {
+        tabBarVisible,
+        headerTintColor: theme.SECONDARY_COLOR,
+        headerStyle: {
+          backgroundColor: theme.PRIMARY_COLOR,
+        },
+      };
     },
   },
 );
@@ -67,15 +75,38 @@ const UserStack = createStackNavigator(
       screen: UserScreen,
       navigationOptions: {headerShown: false},
     },
-    Map: MapScreen,
+    Map: {
+      screen: MapScreen,
+      navigationOptions: ({navigation}) => {
+        if (
+          navigation &&
+          navigation.state &&
+          navigation.state.params &&
+          navigation.state.params.title
+        ) {
+          return {title: navigation.state.params.title};
+        }
+      },
+    },
+    ShareLocation: {
+      screen: ShareLocationScreen,
+      navigationOptions: {title: 'Share Location'},
+    },
   },
   {
     initialRouteName: 'User',
-    navigationOptions: {
-      headerTintColor: theme.SECONDARY_COLOR,
-      headerStyle: {
-        backgroundColor: theme.PRIMARY_COLOR,
-      },
+    navigationOptions: ({navigation}) => {
+      let tabBarVisible = true;
+      if (navigation.state.index > 0) {
+        tabBarVisible = false;
+      }
+      return {
+        tabBarVisible,
+        headerTintColor: theme.SECONDARY_COLOR,
+        headerStyle: {
+          backgroundColor: theme.PRIMARY_COLOR,
+        },
+      };
     },
   },
 );

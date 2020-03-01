@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   InitialState,
   Post,
@@ -20,7 +20,8 @@ import Message from '../Message/Message';
 import Button from '../Button/Button';
 
 import styles from './Posts.sass';
-import PostService from "../../services/Posts";
+import PostService from '../../services/Posts';
+import Loading from '../Loading/Loading';
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
@@ -35,6 +36,7 @@ interface StateProps {
 }
 
 const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
+  const [showLoading, setShowLoading] = useState(false);
   const {posts, currentPostSelectedId, userConnected} = useSelector<
     InitialState,
     StateProps
@@ -55,14 +57,20 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
         return await PostService.getPosts();
       } catch (error) {
         console.error(error);
+        setShowLoading(false);
       }
     };
 
+    setShowLoading(true);
     fetchData()
       .then(data => {
+        setShowLoading(false);
         rootDispatcher.updatePosts(data!);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        setShowLoading(false);
+        console.error(err);
+      });
   }, []);
 
   const getPostsStyles = (): StyleProp<ViewStyle> => {
@@ -99,8 +107,11 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
 
   return (
     <View style={styles.postContainer}>
+      {showLoading && <Loading message="Loading..." />}
       <View style={styles.header}>
-        {userConnected.image.uri && <Image style={styles.avatar} source={userConnected.image} />}
+        {userConnected.image.uri && (
+          <Image style={styles.avatar} source={userConnected.image} />
+        )}
         <Text style={styles.title}>{userConnected.name}</Text>
       </View>
       <ScrollView contentInsetAdjustmentBehavior="automatic">

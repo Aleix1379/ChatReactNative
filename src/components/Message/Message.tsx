@@ -48,7 +48,7 @@ const Message: React.FC<Props> = ({
       marginBottom: 8,
 
       paddingHorizontal: 8,
-      paddingVertical: 4,
+      paddingVertical: 16,
     };
     if (isSelected && WindowUtils.isDesktop()) {
       style.backgroundColor = theme.DARK_COLOR;

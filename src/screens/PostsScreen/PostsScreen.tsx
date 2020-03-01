@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StatusBar, View,} from 'react-native';
+import {SafeAreaView, StatusBar, View} from 'react-native';
 
 import {useDispatch} from 'react-redux';
 
@@ -8,7 +8,7 @@ import {RootDispatcher} from '../../store/root-reducer';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import Loading from '../../components/Loading/Loading';
 import styles from './PostsScreen.sass';
-import CommentService from "../../services/Comments";
+import CommentService from '../../services/Comments';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
