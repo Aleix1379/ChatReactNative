@@ -8,6 +8,7 @@ import {RootDispatcher} from '../../store/root-reducer';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import Loading from '../../components/Loading/Loading';
 import styles from './PostsScreen.sass';
+import CommentService from "../../services/Comments";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -22,10 +23,7 @@ const App: React.FC<Props> = ({navigation}) => {
   const showCommentOfPost = async (postId: number, name: string) => {
     setShowLoading(true);
     try {
-      let response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${postId}/comments`,
-      );
-      let responseJson = await response.json();
+      const responseJson = await CommentService.getCommentsByPostId(postId);
       rootDispatcher.updateComments(responseJson);
 
       setShowLoading(false);

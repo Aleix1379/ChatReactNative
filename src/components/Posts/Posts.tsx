@@ -20,6 +20,7 @@ import Message from '../Message/Message';
 import Button from '../Button/Button';
 
 import styles from './Posts.sass';
+import PostService from "../../services/Posts";
 
 interface Props {
   postPressHandler(postId: number, name: string): void;
@@ -49,18 +50,17 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
   const rootDispatcher = new RootDispatcher(dispatch);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
-        let response = await fetch('http://jsonplaceholder.typicode.com/posts');
-        return await response.json();
+        return await PostService.getPosts();
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     fetchData()
       .then(data => {
-        rootDispatcher.updatePosts(data);
+        rootDispatcher.updatePosts(data!);
       })
       .catch(err => console.error(err));
   }, []);
