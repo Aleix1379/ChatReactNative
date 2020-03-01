@@ -126,13 +126,12 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
                 <Text style={styles.title}>{userConnected.name}</Text>
             </View>
 
-            <SearchBox
-                value={searchText}
-                placeholder="Search posts"
-                onChangeText={setSearchText}
-            />
-
             <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <SearchBox
+                    value={searchText}
+                    placeholder="Search posts"
+                    onChangeText={setSearchText}
+                />
                 <View style={getPostsStyles()}>
                     {posts.map((post: Post) => (
                         <Message
