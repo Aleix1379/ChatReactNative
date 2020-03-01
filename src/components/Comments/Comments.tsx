@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleProp, Text, View, ViewStyle,} from 'react-native';
-import {shallowEqual, useSelector} from 'react-redux';
-import {Comment, InitialState} from '../../store/root-reducer';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import {Comment, InitialState, Post, RootDispatcher} from '../../store/root-reducer';
 import {WindowUtils} from '../../utils/WindowUtils';
 import Button from '../Button/Button';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import Message from '../Message/Message';
 import styles from './Comments.sass';
+import SearchBox from "../SearchBox/SearchBox";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -18,6 +19,8 @@ interface StateProps {
 }
 
 const Comments: React.FC<Props> = ({navigation}) => {
+  const [searchText, setSearchText] = useState('');
+  const [commentsDataSource, setCommentsDataSource] = useState<Comment[]>([]);
   const {comments, currentPostSelectedId} = useSelector<
     InitialState,
     StateProps
@@ -51,9 +54,36 @@ const Comments: React.FC<Props> = ({navigation}) => {
     return style;
   };
 
+  const dispatch = useDispatch();
+  const rootDispatcher = new RootDispatcher(dispatch);
+
+  useEffect(() => {
+    if (comments.length !== commentsDataSource.length) {
+      comments.forEach(comment => {
+        if (commentsDataSource.findIndex(commentDataSource => commentDataSource.id === comment.id) === -1) {
+          commentsDataSource.push(comment);
+        }
+      });
+    }
+  }, [comments]);
+
+  useEffect(() => {
+    const commentsFiltered = commentsDataSource.filter(comment =>
+        comment.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        comment.email.toLowerCase().includes(searchText.toLowerCase()) ||
+        comment.body.toLowerCase().includes(searchText.toLowerCase())
+    );
+    rootDispatcher.updateComments(commentsFiltered);
+  }, [searchText]);
+
   return (
     <View style={styles.messageContainer}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <SearchBox
+            value={searchText}
+            placeholder="Search comments"
+            onChangeText={setSearchText}
+        />
         <View style={getMessagesStyles()}>
           {comments.map((comment: Comment) => (
             <Message
