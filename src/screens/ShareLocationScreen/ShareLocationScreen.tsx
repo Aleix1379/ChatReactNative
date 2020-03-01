@@ -17,6 +17,7 @@ import {
   User,
 } from '../../store/root-reducer';
 import PostService from '../../services/Posts';
+import Loading from '../../components/Loading/Loading';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -65,6 +66,7 @@ const ShareLocationScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.shareLocation}>
+      {showLoading && <Loading message="Loading..." />}
       <Text style={styles.location}>{location}</Text>
       <View style={styles.mapContainer}>
         <MapView
