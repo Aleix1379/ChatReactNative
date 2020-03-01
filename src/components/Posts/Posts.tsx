@@ -1,18 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  InitialState,
-  Post,
-  RootDispatcher,
-  User,
-} from '../../store/root-reducer';
-import {
-  ScrollView,
-  StyleProp,
-  View,
-  ViewStyle,
-  Text,
-  Image,
-} from 'react-native';
+import {InitialState, Post, RootDispatcher, User,} from '../../store/root-reducer';
+import {Image, ScrollView, StyleProp, Text, View, ViewStyle,} from 'react-native';
 import {WindowUtils} from '../../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
@@ -22,121 +10,151 @@ import Button from '../Button/Button';
 import styles from './Posts.sass';
 import PostService from '../../services/Posts';
 import Loading from '../Loading/Loading';
+import SearchBox from '../SearchBox/SearchBox';
 
 interface Props {
-  postPressHandler(postId: number, name: string): void;
+    postPressHandler(postId: number, name: string): void;
 
-  navigation: NavigationScreenProp<NavigationState>;
+    navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface StateProps {
-  currentPostSelectedId: number;
-  userConnected: User;
-  posts: Post[];
+    currentPostSelectedId: number;
+    userConnected: User;
+    posts: Post[];
 }
 
 const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
-  const [showLoading, setShowLoading] = useState(false);
-  const {posts, currentPostSelectedId, userConnected} = useSelector<
-    InitialState,
-    StateProps
-  >((state: InitialState) => {
-    return {
-      posts: state.posts,
-      currentPostSelectedId: state.currentPostSelectedId,
-      userConnected: state.userConnected,
+    const [showLoading, setShowLoading] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [postsDataSource, setPostsDataSource] = useState<Post[]>([]);
+    const {posts, currentPostSelectedId, userConnected} = useSelector<InitialState,
+        StateProps>((state: InitialState) => {
+        return {
+            posts: state.posts,
+            currentPostSelectedId: state.currentPostSelectedId,
+            userConnected: state.userConnected,
+        };
+    }, shallowEqual);
+
+    const dispatch = useDispatch();
+    const rootDispatcher = new RootDispatcher(dispatch);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                return await PostService.getPosts();
+            } catch (error) {
+                console.error(error);
+                setShowLoading(false);
+            }
+        };
+
+        setShowLoading(true);
+        fetchData()
+            .then(data => {
+                setShowLoading(false);
+                setPostsDataSource(data!);
+                rootDispatcher.updatePosts(data!);
+            })
+            .catch(err => {
+                setShowLoading(false);
+                console.error(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        const postsFiltered = postsDataSource.filter(post =>
+            post.title.toLowerCase().includes(searchText.toLowerCase()) ||
+            post.body.toLowerCase().includes(searchText.toLowerCase())
+        );
+        rootDispatcher.updatePosts(postsFiltered);
+    }, [searchText]);
+
+    /**
+     * I update the data soruce with the new post
+     */
+    useEffect(() => {
+        if (posts.length !== postsDataSource.length) {
+            posts.forEach(post => {
+                if (postsDataSource.findIndex(postDataSource => postDataSource.id === post.id) === -1) {
+                    postsDataSource.push(post);
+                }
+            });
+        }
+    }, [posts]);
+
+    const getPostsStyles = (): StyleProp<ViewStyle> => {
+        let style = {
+            paddingHorizontal: 0,
+        };
+        if (WindowUtils.isDesktop()) {
+            style.paddingHorizontal = 15;
+        }
+        return style;
     };
-  }, shallowEqual);
 
-  const dispatch = useDispatch();
-  const rootDispatcher = new RootDispatcher(dispatch);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        return await PostService.getPosts();
-      } catch (error) {
-        console.error(error);
-        setShowLoading(false);
-      }
+    const selectPost = (postId: number, name: string) => {
+        rootDispatcher.selectPost(postId);
+        postPressHandler(postId, name);
     };
 
-    setShowLoading(true);
-    fetchData()
-      .then(data => {
-        setShowLoading(false);
-        rootDispatcher.updatePosts(data!);
-      })
-      .catch(err => {
-        setShowLoading(false);
-        console.error(err);
-      });
-  }, []);
-
-  const getPostsStyles = (): StyleProp<ViewStyle> => {
-    let style = {
-      paddingHorizontal: 0,
+    const isCurrentPostSelected = (postId: number): boolean => {
+        return currentPostSelectedId === postId;
     };
-    if (WindowUtils.isDesktop()) {
-      style.paddingHorizontal = 15;
-    }
-    return style;
-  };
 
-  const selectPost = (postId: number, name: string) => {
-    rootDispatcher.selectPost(postId);
-    postPressHandler(postId, name);
-  };
-
-  const isCurrentPostSelected = (postId: number): boolean => {
-    return currentPostSelectedId === postId;
-  };
-
-  const getNewPostStyles = (): StyleProp<ViewStyle> => {
-    const style = {
-      marginHorizontal: 0,
-      paddingHorizontal: 4,
-      paddingVertical: 4,
+    const getNewPostStyles = (): StyleProp<ViewStyle> => {
+        const style = {
+            marginHorizontal: 0,
+            paddingHorizontal: 4,
+            paddingVertical: 4,
+        };
+        if (WindowUtils.isDesktop()) {
+            style.marginHorizontal = 15;
+            style.paddingHorizontal = 0;
+        }
+        return style;
     };
-    if (WindowUtils.isDesktop()) {
-      style.marginHorizontal = 15;
-      style.paddingHorizontal = 0;
-    }
-    return style;
-  };
 
-  return (
-    <View style={styles.postContainer}>
-      {showLoading && <Loading message="Loading..." />}
-      <View style={styles.header}>
-        {userConnected.image.uri && (
-          <Image style={styles.avatar} source={userConnected.image} />
-        )}
-        <Text style={styles.title}>{userConnected.name}</Text>
-      </View>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View style={getPostsStyles()}>
-          {posts.map((post: Post) => (
-            <Message
-              key={post.id}
-              id={post.id!}
-              title={post.title}
-              body={post.body}
-              isSelected={isCurrentPostSelected(post.id!)}
-              messagePressHandler={selectPost}
+    return (
+        <View style={styles.postContainer}>
+            {showLoading && <Loading message="Loading..."/>}
+            <View style={styles.header}>
+                {userConnected.image.uri && (
+                    <Image style={styles.avatar} source={userConnected.image}/>
+                )}
+                <Text style={styles.title}>{userConnected.name}</Text>
+            </View>
+
+            <SearchBox
+                value={searchText}
+                placeholder="Search posts"
+                onChangeText={setSearchText}
             />
-          ))}
-        </View>
-      </ScrollView>
 
-      <View style={getNewPostStyles()}>
-        <Button
-          title="New post"
-          onPress={() => navigation.navigate('NewPost')}
-        />
-      </View>
-    </View>
-  );
+            <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <View style={getPostsStyles()}>
+                    {posts.map((post: Post) => (
+                        <Message
+                            key={post.id}
+                            id={post.id!}
+                            title={post.title}
+                            body={post.body}
+                            isSelected={isCurrentPostSelected(post.id!)}
+                            messagePressHandler={selectPost}
+                        />
+                    ))}
+                </View>
+            </ScrollView>
+
+            <View style={getNewPostStyles()}>
+                <Button
+                    title="New post"
+                    onPress={() => navigation.navigate('NewPost')}
+                />
+            </View>
+        </View>
+    );
 };
 
 export default Posts;
