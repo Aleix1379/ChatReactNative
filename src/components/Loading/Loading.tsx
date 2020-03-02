@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, StyleProp, StyleSheet, Text, View, ViewStyle} from 'react-native';
 
 import theme from '../../styles/theme.style';
 import styles from './Loading.sass';
@@ -13,7 +13,7 @@ const Loading: React.FC<Props> = ({message}) => {
   return (
     <View style={reactStyle.loading}>
       <ActivityIndicator size="large" color={theme.SECONDARY_COLOR} />
-      {message && <Text style={styles.message}>{message}</Text>}
+      {message && <Text style={styles.message as StyleProp<ViewStyle>}>{message}</Text>}
     </View>
   );
 };

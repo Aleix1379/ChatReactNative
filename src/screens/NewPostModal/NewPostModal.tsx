@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, Text, View} from 'react-native';
+import {SafeAreaView, StyleProp, Text, View, ViewStyle} from 'react-native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {
   InitialState,
@@ -70,10 +70,10 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.saveView}>
+    <SafeAreaView style={styles.saveView as StyleProp<ViewStyle>}>
       {showLoading && <Loading message="Loading" />}
-      <View style={styles.newPost}>
-        <Text style={styles.title}>New post</Text>
+      <View style={styles.newPost as StyleProp<ViewStyle>}>
+        <Text style={styles.title as StyleProp<ViewStyle>}>New post</Text>
         <InputTextLabel
           label="Title"
           value={title}
@@ -88,11 +88,11 @@ const NewPostModal: React.FC<Props> = ({navigation}) => {
           onChangeText={text => setBody(text)}
         />
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button title="CANCEL" onPress={cancel} />
         </View>
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button title="SAVE" onPress={addPost} />
         </View>
       </View>

@@ -62,7 +62,7 @@ export const rootReducer: Reducer<InitialState, DispatchAction> = (
   } else if (action.type === ActionType.UpdateComments) {
     return {...state, comments: action.payload.comments || []};
   } else if (action.type === ActionType.UpdateUser) {
-    return {...state, userConnected: action.payload.userConnected || []};
+    return {...state, userConnected: action.payload.userConnected || {id: -1, name: 'default', email: 'default', image: {uri: 'default'}}};
   } else if (action.type === ActionType.SelectPost) {
     return {
       ...state,

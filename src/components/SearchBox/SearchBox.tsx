@@ -1,6 +1,6 @@
 import React from 'react';
 import {TextInput} from 'react-native-paper';
-import {TouchableHighlight, View} from 'react-native';
+import {StyleProp, TouchableHighlight, View, ViewStyle} from 'react-native';
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import styles from './SearchBox.sass';
@@ -13,8 +13,8 @@ interface Props {
 
 const SearchBox: React.FC<Props> = ({value, placeholder, onChangeText}) => {
     return (
-        <View style={styles.search}>
-            <View style={styles.searchInput}>
+        <View style={styles.search as StyleProp<ViewStyle>}>
+            <View style={styles.searchInput as StyleProp<ViewStyle>}>
                 <TextInput
                     value={value}
                     onChangeText={onChangeText}

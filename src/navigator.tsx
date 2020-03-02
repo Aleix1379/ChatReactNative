@@ -20,135 +20,121 @@ import MapScreen from './screens/MapScreen/MapScreen';
 import ShareLocationScreen from './screens/ShareLocationScreen/ShareLocationScreen';
 
 const PostsStack = createStackNavigator(
-  {
-    Posts: {
-      screen: PostsScreen,
-      navigationOptions: {headerShown: false},
-    },
-    Comments: {
-      screen: CommentsScreen,
-      navigationOptions: ({navigation}) => {
-        if (
-          navigation &&
-          navigation.state &&
-          navigation.state.params &&
-          navigation.state.params.title
-        ) {
-          return {title: navigation.state.params.title};
-        }
-      },
-    },
-    NewPost: {
-      screen: NewPostModal,
-      navigationOptions: {headerShown: false},
-    },
-    NewComment: {
-      screen: NewCommentModal,
-      navigationOptions: {headerShown: false},
-    },
-    Error: {
-      screen: ErrorModal,
-      navigationOptions: {headerShown: false},
-    },
-  },
-  {
-    initialRouteName: 'Posts',
-    navigationOptions: ({navigation}) => {
-      let tabBarVisible = true;
-      if (navigation.state.index > 0) {
-        tabBarVisible = false;
-      }
-      return {
-        tabBarVisible,
-        headerTintColor: theme.SECONDARY_COLOR,
-        headerStyle: {
-          backgroundColor: theme.PRIMARY_COLOR,
+    {
+        Posts: {
+            screen: PostsScreen,
+            navigationOptions: {headerShown: false},
         },
-      };
+        Comments: {
+            screen: CommentsScreen,
+            navigationOptions: ({navigation}) => {
+                return {title: navigation && navigation.state && navigation.state.params && navigation.state.params.title};
+            },
+        },
+        NewPost: {
+            screen: NewPostModal,
+            navigationOptions: {headerShown: false},
+        },
+        NewComment: {
+            screen: NewCommentModal,
+            navigationOptions: {headerShown: false},
+        },
+        Error: {
+            screen: ErrorModal,
+            navigationOptions: {headerShown: false},
+        },
     },
-  },
+    {
+        initialRouteName: 'Posts',
+        navigationOptions: ({navigation}) => {
+            let tabBarVisible = true;
+            if (navigation.state.index > 0) {
+                tabBarVisible = false;
+            }
+            return {
+                tabBarVisible,
+                headerTintColor: theme.SECONDARY_COLOR,
+                headerStyle: {
+                    backgroundColor: theme.PRIMARY_COLOR,
+                },
+            };
+        },
+    },
 );
 
 const UserStack = createStackNavigator(
-  {
-    User: {
-      screen: UserScreen,
-      navigationOptions: {headerShown: false},
-    },
-    Map: {
-      screen: MapScreen,
-      navigationOptions: ({navigation}) => {
-        if (
-          navigation &&
-          navigation.state &&
-          navigation.state.params &&
-          navigation.state.params.title
-        ) {
-          return {title: navigation.state.params.title};
-        }
-      },
-    },
-    ShareLocation: {
-      screen: ShareLocationScreen,
-      navigationOptions: {title: 'Share Location'},
-    },
-  },
-  {
-    initialRouteName: 'User',
-    navigationOptions: ({navigation}) => {
-      let tabBarVisible = true;
-      if (navigation.state.index > 0) {
-        tabBarVisible = false;
-      }
-      return {
-        tabBarVisible,
-        headerTintColor: theme.SECONDARY_COLOR,
-        headerStyle: {
-          backgroundColor: theme.PRIMARY_COLOR,
+    {
+        User: {
+            screen: UserScreen,
+            navigationOptions: {headerShown: false},
         },
-      };
+        Map: {
+            screen: MapScreen,
+            navigationOptions: ({navigation}) => {
+                return {title: navigation && navigation.state && navigation.state.params && navigation.state.params.title};
+            },
+        },
+        ShareLocation: {
+            screen: ShareLocationScreen,
+            navigationOptions: {title: 'Share Location'},
+        },
     },
-  },
+    {
+        initialRouteName: 'User',
+        navigationOptions: ({navigation}) => {
+            let tabBarVisible = true;
+            if (navigation.state.index > 0) {
+                tabBarVisible = false;
+            }
+            return {
+                tabBarVisible,
+                headerTintColor: theme.SECONDARY_COLOR,
+                headerStyle: {
+                    backgroundColor: theme.PRIMARY_COLOR,
+                },
+            };
+        },
+    },
 );
 
 const BottomTabNavigator = createMaterialBottomTabNavigator(
-  {
-    Posts: {
-      screen: PostsStack,
-      navigationOptions: {
-        tabBarIcon: ({tintColor}) => (
-          <FontAwesomeIcon size={22} color={tintColor} icon={faComments} />
-        ),
-      },
+    {
+        Posts: {
+            screen: PostsStack,
+            navigationOptions: {
+                tabBarIcon: ({tintColor}) => (
+                    <FontAwesomeIcon size={22} color={tintColor} icon={faComments}/>
+                ),
+            },
+        },
+        Profile: {
+            screen: UserStack,
+            navigationOptions: {
+                tabBarIcon: ({tintColor}) => (
+                    <FontAwesomeIcon size={22} color={tintColor} icon={faUser}/>
+                ),
+            },
+        },
     },
-    Profile: {
-      screen: UserStack,
-      navigationOptions: {
-        tabBarIcon: ({tintColor}) => (
-          <FontAwesomeIcon size={22} color={tintColor} icon={faUser} />
-        ),
-      },
+    {
+        initialRouteName: 'Posts',
+        activeColor: theme.SECONDARY_COLOR,
+        inactiveColor: theme.LIGHT_COLOR,
+        barStyle: {backgroundColor: theme.PRIMARY_COLOR},
     },
-  },
-  {
-    initialRouteName: 'Posts',
-    activeColor: theme.SECONDARY_COLOR,
-    inactiveColor: theme.LIGHT_COLOR,
-    barStyle: {backgroundColor: theme.PRIMARY_COLOR},
-  },
 );
 
 // const container = createAppContainer(Home);
 
 export default createAppContainer(
-  createSwitchNavigator(
-    {
-      App: BottomTabNavigator,
-    },
-    {
-      initialRouteName: 'App',
-    },
-  ),
+    createSwitchNavigator(
+        {
+            App: BottomTabNavigator,
+        },
+        {
+            initialRouteName: 'App',
+        },
+    ),
 );
 
 // export default container;

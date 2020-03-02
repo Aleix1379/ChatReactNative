@@ -1,5 +1,5 @@
 import React from 'react';
-import {GestureResponderEvent, Text, TouchableHighlight,} from 'react-native';
+import {GestureResponderEvent, StyleProp, Text, TouchableHighlight, ViewStyle,} from 'react-native';
 import styles from './Button.sass';
 
 interface Props {
@@ -9,8 +9,8 @@ interface Props {
 
 const Button: React.FC<Props> = ({title, onPress}) => {
   return (
-    <TouchableHighlight style={styles.button} onPress={onPress}>
-      <Text style={styles.textButton}>{title}</Text>
+    <TouchableHighlight style={styles.button as StyleProp<ViewStyle>} onPress={onPress}>
+      <Text style={styles.textButton as StyleProp<ViewStyle>}>{title}</Text>
     </TouchableHighlight>
   );
 };

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {InitialState, Post, RootDispatcher, User,} from '../../store/root-reducer';
-import {Image, ScrollView, StyleProp, Text, View, ViewStyle,} from 'react-native';
+import {Image, ImageStyle, ScrollView, StyleProp, Text, View, ViewStyle,} from 'react-native';
 import {WindowUtils} from '../../utils/WindowUtils';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
@@ -117,14 +117,14 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
     };
 
     return (
-        <View style={styles.postContainer}>
+        <View style={styles.postContainer as StyleProp<ViewStyle>}>
             {showLoading && <Loading message="Loading..."/>}
-            <View style={styles.header}>
+            <View style={styles.header as StyleProp<ViewStyle>}>
                 {userConnected.image.uri && (
-                    <Image style={styles.avatar} source={userConnected.image}/>
+                    <Image style={styles.avatar as StyleProp<ImageStyle>} source={userConnected.image}/>
                 )}
-                <Text style={styles.title}>{userConnected.name}</Text>
-                <Text style={styles.title}>{userConnected.email}</Text>
+                <Text style={styles.title as StyleProp<ViewStyle>}>{userConnected.name}</Text>
+                <Text style={styles.title as StyleProp<ViewStyle>}>{userConnected.email}</Text>
             </View>
 
             <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -156,5 +156,6 @@ const Posts: React.FC<Props> = ({postPressHandler, navigation}) => {
         </View>
     );
 };
+
 
 export default Posts;

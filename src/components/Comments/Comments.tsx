@@ -77,7 +77,7 @@ const Comments: React.FC<Props> = ({navigation}) => {
   }, [searchText]);
 
   return (
-    <View style={styles.messageContainer}>
+    <View style={styles.messageContainer as StyleProp<ViewStyle>}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <SearchBox
             value={searchText}
@@ -97,13 +97,13 @@ const Comments: React.FC<Props> = ({navigation}) => {
         </View>
 
         {currentPostSelectedId === -1 && (
-          <Text style={styles.noData}>
+          <Text style={styles.noData as StyleProp<ViewStyle>}>
             Choose a post to see the coments
           </Text>
         )}
 
         {comments.length === 0 && (
-          <Text style={styles.noData}>
+          <Text style={styles.noData as StyleProp<ViewStyle>}>
             There is no comments send a message to be the first
           </Text>
         )}

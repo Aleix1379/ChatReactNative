@@ -61,9 +61,9 @@ const Message: React.FC<Props> = ({
     return (
         <TouchableHighlight onPress={selectMessage}>
             <View style={getMessageStyle()}>
-                <Text style={styles.title}>{capitalizeFirstLetter(title)}</Text>
-                {email && email.length > 0 && <Text style={styles.email}>{email}</Text>}
-                <Text style={styles.body}>{body}</Text>
+                <Text style={styles.title as StyleProp<ViewStyle>}>{capitalizeFirstLetter(title)}</Text>
+                {email && email.length > 0 && <Text style={styles.email as StyleProp<ViewStyle>}>{email}</Text>}
+                <Text style={styles.body as StyleProp<ViewStyle>}>{body}</Text>
             </View>
         </TouchableHighlight>
     );

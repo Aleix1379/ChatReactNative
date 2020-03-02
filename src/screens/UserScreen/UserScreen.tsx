@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
-import {SafeAreaView, View, Image, ImageURISource, Text} from 'react-native';
+import {SafeAreaView, View, Image, ImageURISource, Text, ViewStyle, StyleProp, ImageStyle} from 'react-native';
 import styles from './UserScreen.sass';
 import InputTextLabel from '../../components/TextInputLabel/TextInput';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
@@ -9,7 +9,7 @@ import Button from '../../components/Button/Button';
 import ImagePicker from 'react-native-image-picker';
 import Loading from '../../components/Loading/Loading';
 import Geolocation from '@react-native-community/geolocation';
-import Geocoder from 'react-native-geocoder';
+import Geocoder from 'react-native-geocoder-reborn';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -93,10 +93,10 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.saveView}>
+    <SafeAreaView style={styles.saveView as StyleProp<ViewStyle>}>
       {showLoading && <Loading />}
-      <View style={styles.userProfile}>
-        <View style={styles.input}>
+      <View style={styles.userProfile as StyleProp<ViewStyle>}>
+        <View style={styles.input as StyleProp<ViewStyle>}>
           <InputTextLabel
             label="Name"
             value={name}
@@ -105,7 +105,7 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
 
-        <View style={styles.input}>
+        <View style={styles.input as StyleProp<ViewStyle>}>
           <InputTextLabel
             label="Email"
             value={email}
@@ -114,15 +114,15 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
 
-        {avatar.uri && <Image style={styles.avatar} source={avatar} />}
+        {avatar.uri && <Image style={styles.avatar as StyleProp<ImageStyle>} source={avatar} />}
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button title="CHANGE AVATAR" onPress={updatePicture} />
         </View>
 
-        {location.length > 0 && <Text style={styles.location}>{location}</Text>}
+        {location.length > 0 && <Text style={styles.location as StyleProp<ViewStyle>}>{location}</Text>}
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button
             title="SHOW YOUR LOCATION ON A MAP"
             onPress={() =>
@@ -131,7 +131,7 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button
             title="SHARE YOUR LOCATION"
             onPress={() =>
@@ -143,7 +143,7 @@ const UserScreen: React.FC<Props> = ({navigation}) => {
           />
         </View>
 
-        <View style={styles.button}>
+        <View style={styles.button as StyleProp<ViewStyle>}>
           <Button title="SAVE" onPress={updateProfile} />
         </View>
       </View>

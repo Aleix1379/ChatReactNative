@@ -5,7 +5,7 @@ import {
   NavigationState,
   StackActions,
 } from 'react-navigation';
-import {Text, View} from 'react-native';
+import {StyleProp, Text, View, ViewStyle} from 'react-native';
 import MapView from 'react-native-maps';
 import Button from '../../components/Button/Button';
 import styles from './ShareLocationScreen.sass';
@@ -65,12 +65,12 @@ const ShareLocationScreen: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <View style={styles.shareLocation}>
+    <View style={styles.shareLocation as StyleProp<ViewStyle>}>
       {showLoading && <Loading message="Loading..." />}
-      <Text style={styles.location}>{location}</Text>
-      <View style={styles.mapContainer}>
+      <Text style={styles.location as StyleProp<ViewStyle>}>{location}</Text>
+      <View style={styles.mapContainer as StyleProp<ViewStyle>}>
         <MapView
-          style={styles.map}
+          style={styles.map as StyleProp<ViewStyle>}
           region={{
             latitude: coords.latitude,
             longitude: coords.longitude,
@@ -80,7 +80,7 @@ const ShareLocationScreen: React.FC<Props> = ({navigation}) => {
           showsUserLocation={true}
         />
       </View>
-      <View style={styles.sendLocation}>
+      <View style={styles.sendLocation as StyleProp<ViewStyle>}>
         <Button title="SEND YOUR LOCATON" onPress={shareLocation} />
       </View>
     </View>

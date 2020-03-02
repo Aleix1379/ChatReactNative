@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StatusBar, View} from 'react-native';
+import {SafeAreaView, StatusBar, StyleProp, View, ViewStyle} from 'react-native';
 
 import {useDispatch} from 'react-redux';
 
@@ -49,13 +49,13 @@ const App: React.FC<Props> = ({navigation}) => {
         <>
             <StatusBar barStyle="dark-content"/>
             <SafeAreaView>
-                <View style={styles.body}>
+                <View style={styles.body as StyleProp<ViewStyle>}>
                     {showLoading && <Loading message="Loading..."/>}
 
                     {
                         !showTabletLayout &&
-                        <View style={styles.messages}>
-                            <View style={styles.posts}>
+                        <View style={styles.messages as StyleProp<ViewStyle>}>
+                            <View style={styles.posts as StyleProp<ViewStyle>}>
                                 <Posts
                                     navigation={navigation}
                                     postPressHandler={showCommentOfPost}
@@ -66,8 +66,8 @@ const App: React.FC<Props> = ({navigation}) => {
 
                     {
                         showTabletLayout &&
-                        <View style={styles.messages}>
-                            <View style={styles.posts}>
+                        <View style={styles.messages as StyleProp<ViewStyle>}>
+                            <View style={styles.posts as StyleProp<ViewStyle>}>
                                 <Posts
                                     navigation={navigation}
                                     postPressHandler={showCommentOfPost}
